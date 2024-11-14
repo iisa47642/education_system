@@ -12,3 +12,11 @@ class CustomUser(AbstractUser):
     additional_info = models.TextField(null=True)
     gpa = models.FloatField(null=True, blank=True)
     perc = models.FloatField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'custom_user'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+        
+    
+        

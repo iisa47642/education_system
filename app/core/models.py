@@ -30,9 +30,13 @@ class LessonLocation(models.Model):
 '''
 Model describing lesson
 '''
+
+class StudentGroup(models.Model):
+    name = models.CharField(max_length=50);
+
 class Lesson(models.Model):
     subjectId =models.ForeignKey(Subject, on_delete=models.CASCADE);
-    groupId = models.ManyToManyField(Group, related_name="groups", blank=True);
+    groupId = models.ManyToManyField(StudentGroup, related_name="groups", blank=True);
     number = models.IntegerField(null=True);
     startTime = models.DateTimeField();
     endTime = models.DateTimeField();

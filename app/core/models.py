@@ -19,36 +19,36 @@ class CustomUser(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 class Subject(models.Model):
-    name = models.CharField(max_length=50);
+    name = models.CharField(max_length=50)
 
 class TypeOfLesson(models.Model):
-    name = models.CharField(max_length=50);
+    name = models.CharField(max_length=50)
 
 class LessonLocation(models.Model):
-    name = models.CharField(max_length=50);
+    name = models.CharField(max_length=50)
 
 '''
 Model describing lesson
 '''
 
 class StudentGroup(models.Model):
-    name = models.CharField(max_length=50);
+    name = models.CharField(max_length=50)
 
 class Lesson(models.Model):
-    subjectId =models.ForeignKey(Subject, on_delete=models.CASCADE);
-    groupId = models.ManyToManyField(StudentGroup, related_name="groups", blank=True);
-    number = models.IntegerField(null=True);
-    startTime = models.DateTimeField();
-    endTime = models.DateTimeField();
-    type = models.ForeignKey(TypeOfLesson, on_delete=models.CASCADE);
-    location = models.ForeignKey(LessonLocation, on_delete=models.CASCADE);
-    date = models.DateField();
+    subjectId =models.ForeignKey(Subject, on_delete=models.CASCADE)
+    groupId = models.ManyToManyField(StudentGroup, related_name="groups", blank=True)
+    number = models.IntegerField(null=True)
+    startTime = models.DateTimeField()
+    endTime = models.DateTimeField()
+    type = models.ForeignKey(TypeOfLesson, on_delete=models.CASCADE)
+    location = models.ForeignKey(LessonLocation, on_delete=models.CASCADE)
+    date = models.DateField()
 
 
 
 class Schedule(models.Model):
-    lessonId = models.ForeignKey(Lesson, on_delete=models.CASCADE); # link to tutor's lessons
-    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE); #link to tutor
+    lessonId = models.ForeignKey(Lesson, on_delete=models.CASCADE) # link to tutor's lessons
+    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #link to tutor
 
 
 

@@ -23,21 +23,11 @@ class CustomUser(AbstractUser):
 
 class Subject(models.Model):
     name = models.CharField(max_length=50)
-<<<<<<< HEAD
-
-class TypeOfLesson(models.Model):
-    name = models.CharField(max_length=50)
-
-class LessonLocation(models.Model):
-    name = models.CharField(max_length=50)
-
-=======
     
     class Meta:
         db_table = 'subject'
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
-
 
 class TypeOfLesson(models.Model):
     name = models.CharField(max_length=50)
@@ -45,32 +35,28 @@ class TypeOfLesson(models.Model):
     class Meta:
         db_table = 'typeoflesson'
         verbose_name = 'Тип занятия'
-        verbose_name_plural = 'Типы занятий'
+        verbose_name_plural = 'Тип занятий'
+    
 
 class LessonLocation(models.Model):
     name = models.CharField(max_length=50)
-    
+
     class Meta:
         db_table = 'lessonlocation'
         verbose_name = 'Аудитория'
         verbose_name_plural = 'Аудитории'
-        
->>>>>>> a289c8e (admin panel + models.py + admin.py + apps.py)
 '''
 Model describing lesson
 '''
 
 class StudentGroup(models.Model):
     name = models.CharField(max_length=50)
-<<<<<<< HEAD
-=======
     
     class Meta:
         db_table = 'studentgroup'
         verbose_name = 'Группа студентов'
         verbose_name_plural = 'Группы студентов'
 
->>>>>>> a289c8e (admin panel + models.py + admin.py + apps.py)
 
 class Lesson(models.Model):
     subjectId =models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -81,29 +67,23 @@ class Lesson(models.Model):
     type = models.ForeignKey(TypeOfLesson, on_delete=models.CASCADE)
     location = models.ForeignKey(LessonLocation, on_delete=models.CASCADE)
     date = models.DateField()
-<<<<<<< HEAD
-=======
     
     class Meta:
         db_table = 'lesson'
         verbose_name = 'Занятие'
         verbose_name_plural = 'Занятия'
->>>>>>> a289c8e (admin panel + models.py + admin.py + apps.py)
 
 
 
 class Schedule(models.Model):
     lessonId = models.ForeignKey(Lesson, on_delete=models.CASCADE) # link to tutor's lessons
     userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #link to tutor
-<<<<<<< HEAD
-=======
     class Meta:
         db_table = 'schedule'
         verbose_name = 'Расписание'
         verbose_name_plural = 'Расписания'
 
     
->>>>>>> a289c8e (admin panel + models.py + admin.py + apps.py)
 
 
 

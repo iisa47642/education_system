@@ -28,6 +28,9 @@ class Subject(models.Model):
         db_table = 'subject'
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
+        
+    def __str__(self):
+        return self.name
 
 class TypeOfLesson(models.Model):
     name = models.CharField(max_length=50)
@@ -37,6 +40,9 @@ class TypeOfLesson(models.Model):
         verbose_name = 'Тип занятия'
         verbose_name_plural = 'Тип занятий'
     
+    def __str__(self):
+        return self.username
+    
 
 class LessonLocation(models.Model):
     name = models.CharField(max_length=50)
@@ -45,6 +51,9 @@ class LessonLocation(models.Model):
         db_table = 'lessonlocation'
         verbose_name = 'Аудитория'
         verbose_name_plural = 'Аудитории'
+        
+    def __str__(self):
+        return self.username
 '''
 Model describing lesson
 '''
@@ -56,16 +65,18 @@ class StudentGroup(models.Model):
         db_table = 'studentgroup'
         verbose_name = 'Группа студентов'
         verbose_name_plural = 'Группы студентов'
-
+        
+    def __str__(self):
+        return self.username
 
 class Lesson(models.Model):
-    subjectId =models.ForeignKey(Subject, on_delete=models.CASCADE)
-    groupId = models.ManyToManyField(StudentGroup, related_name="groups", blank=True)
+    subjectId =models.ForeignKey(to=Subject, on_delete=models.CASCADE)
+    groupId = models.ManyToManyField(to=StudentGroup, related_name="groups", blank=True)
     number = models.IntegerField(null=True)
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()
     type = models.ForeignKey(TypeOfLesson, on_delete=models.CASCADE)
-    location = models.ForeignKey(LessonLocation, on_delete=models.CASCADE)
+    location = models.ForeignKey(to=LessonLocation, on_delete=models.CASCADE)
     date = models.DateField()
     
     class Meta:
@@ -76,8 +87,8 @@ class Lesson(models.Model):
 
 
 class Schedule(models.Model):
-    lessonId = models.ForeignKey(Lesson, on_delete=models.CASCADE) # link to tutor's lessons
-    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #link to tutor
+    lessonId = models.ForeignKey(to=Lesson, on_delete=models.CASCADE) # link to tutor's lessons
+    userId = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE) #link to tutor
     class Meta:
         db_table = 'schedule'
         verbose_name = 'Расписание'

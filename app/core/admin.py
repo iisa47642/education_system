@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from core.models import (CustomUser, Lesson, LessonLocation,
-                         Schedule, Subject, TypeOfLesson, StudentGroup)
+                        Subject, TypeOfLesson, StudentGroup)
 
 
 # Register your models here.
@@ -16,9 +16,9 @@ admin.site.register(Lesson)
 class CategoriesAdmin(admin.ModelAdmin):
     model = LessonLocation
     
-@admin.register(Schedule)
-class CategoriesAdmin(admin.ModelAdmin):
-    model = Schedule
+# @admin.register(Schedule)
+# class CategoriesAdmin(admin.ModelAdmin):
+#     model = Schedule
 
 @admin.register(Subject)
 class CategoriesAdmin(admin.ModelAdmin):

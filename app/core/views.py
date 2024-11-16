@@ -1,14 +1,18 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
+from rest_framework.response import Response
 from core.models import (CustomUser, Lesson, LessonLocation,
                         Subject, TypeOfLesson, StudentGroup)
 from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer)
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all(filter)
     serializer_class = CustomUserSerializer
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        queryset = CustomUser.objects.filter(id=id_u)
+        return queryset
+
 
 class SubjectViewSet(viewsets.ModelViewSet):
     queryset = Subject.objects.all()

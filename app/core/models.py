@@ -41,7 +41,7 @@ class TypeOfLesson(models.Model):
         verbose_name_plural = 'Тип занятий'
     
     def __str__(self):
-        return self.username
+        return self.name
     
 
 class LessonLocation(models.Model):
@@ -53,7 +53,7 @@ class LessonLocation(models.Model):
         verbose_name_plural = 'Аудитории'
         
     def __str__(self):
-        return self.username
+        return self.name
 '''
 Model describing lesson
 '''
@@ -67,7 +67,7 @@ class StudentGroup(models.Model):
         verbose_name_plural = 'Группы студентов'
         
     def __str__(self):
-        return self.username
+        return self.name
 
 # TODO https://stackoverflow.com/questions/43118581/how-can-i-add-foreign-key-to-existing-class-in-django
 class Lesson(models.Model):
@@ -85,7 +85,6 @@ class Lesson(models.Model):
         db_table = 'lesson'
         verbose_name = 'Занятие'
         verbose_name_plural = 'Занятия'
-
 
 
 # class Schedule(models.Model):

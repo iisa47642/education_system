@@ -1,11 +1,17 @@
 <script>
-    
+    export default {
+        methods: {
+            goLogin() {
+                this.$router.push({name: "login"});
+            }
+        }
+    }
 </script>
 <template>
     <main>
         <div class="container">
            <h1 class="main__title">WW.STUDY</h1>
-            <a href="">войти в портал</a>
+            <a @click="goLogin">войти в портал</a>
             <p>WW study - учебный портал, обеспечивающий комфортную и эффективную связь учебных заведений со студентами.</p>
             <div class="line"></div> 
         </div>

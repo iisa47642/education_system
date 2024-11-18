@@ -62,7 +62,8 @@ Model describing lesson
 
 class StudentGroup(models.Model):
     name = models.CharField(max_length=50)
-    lessons = models.ManyToManyField(TypeOfLesson,related_name="lessons")
+    lessons = models.ManyToManyField(TypeOfLesson)
+    students = models.ManyToManyField(CustomUser)
 
     
     class Meta:
@@ -91,16 +92,16 @@ class ControlWork(models.Model):
     class Meta:
         db_table = 'controlwork'
         verbose_name = 'Контрольные работы'
-        verbose_name_plural = 'Контрольная работа'
+        verbose_name_plural = 'Контрольные работы'
 
     def __str__(self):
         return self.name
 
 class Subject(models.Model):
     name = models.CharField(max_length=50)
-    groups = models.ManyToManyField(StudentGroup,related_name='groups')
-    control_works=models.ManyToManyField(ControlWork,related_name='control_works')
-    tests=models.ManyToManyField(Test,related_name='tests')
+    groups = models.ManyToManyField(StudentGroup)
+    control_works=models.ManyToManyField(ControlWork)
+    tests=models.ManyToManyField(Test)
     additional_materials = models.ManyToManyField(AdditionalMaterials)
 
     class Meta:
@@ -117,8 +118,8 @@ class Subject(models.Model):
 # TODO https://stackoverflow.com/questions/43118581/how-can-i-add-foreign-key-to-existing-class-in-django
 class Lesson(models.Model):
     subjectId = models.ForeignKey(to=Subject,on_delete=models.CASCADE)
-    groupId = models.ManyToManyField(to=StudentGroup, related_name="groups", blank=True)
-    teacherId = models.ForeignKey(to=CustomUser,related_name='teacher', on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
+    groupId = models.ManyToManyField(to=StudentGroup, blank=True)
+    teacherId = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
     number = models.IntegerField(null=True)
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()

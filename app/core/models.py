@@ -25,16 +25,12 @@ class AdditionalMaterials(models.Model):
     name = models.CharField(max_length=50)
     content = models.BinaryField();
 
-
-    def __str__(self):
-        return self.name
-
-    
     class Meta:
-        db_table = 'subject'
-        verbose_name = 'Предмет'
-        verbose_name_plural = 'Предметы'
-        
+        db_table = ''
+        verbose_name = 'Дополнительный материал'
+        verbose_name_plural = 'Дополнительные материалы'
+
+
     def __str__(self):
         return self.name
 
@@ -80,12 +76,22 @@ class StudentGroup(models.Model):
 class Test(models.Model):
     name = models.CharField(max_length=50)
 
+    class Meta:
+        db_table = 'test'
+        verbose_name = 'Тест'
+        verbose_name_plural = 'Тесты'
+
     def __str__(self):
         return self.name
 
 
 class ControlWork(models.Model):
     name = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'controlwork'
+        verbose_name = 'Контрольные работы'
+        verbose_name_plural = 'Контрольная работа'
 
     def __str__(self):
         return self.name
@@ -97,6 +103,14 @@ class Subject(models.Model):
     tests=models.ManyToManyField(Test,related_name='tests')
     additional_materials = models.ManyToManyField(AdditionalMaterials)
 
+    class Meta:
+        db_table = 'subject'
+        verbose_name = 'Предмет'
+        verbose_name_plural = 'Предметы'
+
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -116,6 +130,7 @@ class Lesson(models.Model):
         db_table = 'lesson'
         verbose_name = 'Занятие'
         verbose_name_plural = 'Занятия'
+    
 
 
 # class Schedule(models.Model):
@@ -133,6 +148,10 @@ class LessonArchive(models.Model):
     userId = models.ForeignKey(to=CustomUser,on_delete=models.CASCADE)
     attendance= models.BooleanField(default=False)
 
+    class Meta:
+        db_table = 'lessonarchive'
+        verbose_name = 'Архив занятий'
+        verbose_name_plural = 'Архив занятий'
 
 
 

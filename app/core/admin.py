@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from core.models import (CustomUser, Lesson, LessonLocation,
-                        Subject, TypeOfLesson, StudentGroup)
+                         Subject, TypeOfLesson, StudentGroup, LessonArchive, Test, ControlWork)
 
 
 # Register your models here.
@@ -31,3 +31,15 @@ class CategoriesAdmin(admin.ModelAdmin):
 @admin.register(StudentGroup)
 class CategoriesAdmin(admin.ModelAdmin):
     model = StudentGroup
+
+@admin.register(LessonArchive)
+class LessonArchiveAdmin(admin.ModelAdmin):
+    model = LessonArchive
+
+@admin.register(Test)
+class TestAdmin(admin.ModelAdmin):
+    model = Test
+
+@admin.register(ControlWork)
+class ControlWork(admin.ModelAdmin):
+    model = ControlWork

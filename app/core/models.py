@@ -21,8 +21,14 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-class Subject(models.Model):
+class AdditionalMaterials(models.Model):
     name = models.CharField(max_length=50)
+    content = models.BinaryField();
+
+
+    def __str__(self):
+        return self.name
+
     
     class Meta:
         db_table = 'subject'
@@ -60,6 +66,8 @@ Model describing lesson
 
 class StudentGroup(models.Model):
     name = models.CharField(max_length=50)
+    lessons = models.ManyToManyField(TypeOfLesson,related_name="lessons")
+
     
     class Meta:
         db_table = 'studentgroup'
@@ -69,9 +77,32 @@ class StudentGroup(models.Model):
     def __str__(self):
         return self.name
 
+class Test(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class ControlWork(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class Subject(models.Model):
+    name = models.CharField(max_length=50)
+    groups = models.ManyToManyField(StudentGroup,related_name='groups')
+    control_works=models.ManyToManyField(ControlWork,related_name='control_works')
+    tests=models.ManyToManyField(Test,related_name='tests')
+    additional_materials = models.ManyToManyField(AdditionalMaterials)
+
+
+
+
 # TODO https://stackoverflow.com/questions/43118581/how-can-i-add-foreign-key-to-existing-class-in-django
 class Lesson(models.Model):
-    subjectId =models.ForeignKey(to=Subject,on_delete=models.CASCADE)
+    subjectId = models.ForeignKey(to=Subject,on_delete=models.CASCADE)
     groupId = models.ManyToManyField(to=StudentGroup, related_name="groups", blank=True)
     teacherId = models.ForeignKey(to=CustomUser,related_name='teacher', on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
     number = models.IntegerField(null=True)
@@ -96,6 +127,11 @@ class Lesson(models.Model):
 #         verbose_name_plural = 'Расписания'
 #
 #
+
+class LessonArchive(models.Model):
+    lessonId = models.ForeignKey(to=Lesson,on_delete=models.CASCADE)
+    userId = models.ForeignKey(to=CustomUser,on_delete=models.CASCADE)
+    attendance= models.BooleanField(default=False)
 
 
 

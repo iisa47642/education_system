@@ -16,15 +16,18 @@
         },
         methods: {
             // типо подгрузка данных
-            async loadData(id) {
-                let data = await axios.get("api/v1/custom_user", {
-                    params: {id:id}
+            async loadData() {
+                let data = await axios.get("/route", {
+                    params: {id: id}
                 });
                 console.log(data);
+            },
+            goCourses(id) {
+                this.$router.push({name: "courses", params: {id: id}});
             }
         },
         mounted() {
-            this.loadData(this.userId);
+            this.loadData();
         }
     }
 </script>
@@ -36,7 +39,7 @@
                     <h2>Привет, студент!</h2>
                     <h3>ww.study <br> cabinet</h3>
                     <ul class="left__menu">
-                        <li><a><span>мои курсы</span></a></li>
+                        <li><a @click="goCourses(this.id)"><span>мои курсы</span></a></li>
                         <li><a><span>мое расписание</span></a></li>
                         <li><a><span>посещаемость</span></a></li>
                         <li><a><span>рейтинг</span></a></li>

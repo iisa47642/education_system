@@ -62,7 +62,6 @@ Model describing lesson
 
 class StudentGroup(models.Model):
     name = models.CharField(max_length=50)
-    lessons = models.ManyToManyField(TypeOfLesson)
     students = models.ManyToManyField(CustomUser)
 
     

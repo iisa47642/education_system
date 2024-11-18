@@ -12,7 +12,6 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
         groups = [i.id for i in StudentGroup.objects.filter(students=id_u)]
-        print(groups)
         queryset = Lesson.objects.filter(groupId__in=groups)
         return queryset
 
@@ -24,12 +23,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return queryset
 
 class RatingViewSet(viewsets.ModelViewSet):
-    # не работает
     serializer_class = CustomUserSerializer
-    def get_queryset(self):
-        id_u = self.request.query_params.get('id')
-        queryset = CustomUser.objects.filter(id=id_u)
-        return queryset
+    queryset = CustomUser.objects.order_by('gpa')
 
 
 class CourseViewSet(viewsets.ModelViewSet):

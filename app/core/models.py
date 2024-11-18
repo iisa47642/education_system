@@ -71,9 +71,9 @@ class StudentGroup(models.Model):
 
 # TODO https://stackoverflow.com/questions/43118581/how-can-i-add-foreign-key-to-existing-class-in-django
 class Lesson(models.Model):
-    subjectId =models.ForeignKey(to=Subject, on_delete=models.CASCADE)
+    subjectId =models.ForeignKey(to=Subject,on_delete=models.CASCADE)
     groupId = models.ManyToManyField(to=StudentGroup, related_name="groups", blank=True)
-    teacherId = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
+    teacherId = models.ForeignKey(to=CustomUser,related_name='teacher', on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
     number = models.IntegerField(null=True)
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()

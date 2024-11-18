@@ -20,8 +20,7 @@ class SubjectViewSet(viewsets.ModelViewSet):
     
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
-    serializer_class =  LessonSerializer
-    
+    serializer_class = LessonSerializer
 class LessonLocationViewSet(viewsets.ModelViewSet):
     queryset = LessonLocation.objects.all()
     serializer_class = LessonLocationSerializer

@@ -4,7 +4,7 @@ from .views import (SubjectViewSet,LessonLocationViewSet,LessonViewSet,
 # Создаем router и регистрируем наш ViewSet
 router = routers.DefaultRouter()
 router.register(r'subject', SubjectViewSet)
-router.register(r'lesson', LessonViewSet)
+router.register(r'lesson', LessonViewSet, 'lesson')
 router.register(r'custom_user', CustomUserViewSet, 'custom_user')
 router.register(r'studentgroup', StudentGroupViewSet)
 router.register(r'typeoflesson', TypeOfLessonViewSet)

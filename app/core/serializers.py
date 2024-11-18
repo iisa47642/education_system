@@ -8,12 +8,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ('username','password','birth_date','surname',
                   'profile','gpa','course','perc','additional_info')
 
-class LessonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lesson
-        fields = ('subjectId','groupId','teacherId',
-                  'number','startTime','endTime','type','location','date')
-
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
@@ -33,3 +27,14 @@ class StudentGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentGroup
         fields = ('id', 'name')
+        
+class LessonSerializer(serializers.ModelSerializer):
+    groupId = serializers.StringRelatedField(many=True)
+    teacherId = CustomUserSerializer()
+    subjectId = SubjectSerializer()
+    location = LessonLocationSerializer()
+    type = TypeOfLessonSerializer()
+    class Meta:
+        model = Lesson
+        fields = ['subjectId','groupId','teacherId',
+                  'number','startTime','endTime','type','location','date']

@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
 
 class AdditionalMaterials(models.Model):
     name = models.CharField(max_length=50)
-    content = models.BinaryField();
+    content = models.BinaryField()
 
     class Meta:
         db_table = ''

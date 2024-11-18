@@ -8,9 +8,13 @@ from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerialize
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
-    queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        groups = [i.id for i in StudentGroup.objects.filter(students=id_u)]
+        print(groups)
+        queryset = Lesson.objects.filter(groupId__in=groups)
+        return queryset
 
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer

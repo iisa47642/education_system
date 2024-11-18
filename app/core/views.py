@@ -6,7 +6,14 @@ from core.models import (CustomUser, Lesson, LessonLocation,
 from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer)
 
-class CustomUserViewSet(viewsets.ModelViewSet):
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+    
+
+class RatingViewSet(viewsets.ModelViewSet):
+    # не работает
     serializer_class = CustomUserSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
@@ -14,21 +21,23 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class SubjectViewSet(viewsets.ModelViewSet):
+class CourseViewSet(viewsets.ModelViewSet):
+    # не работает
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
     
-class LessonViewSet(viewsets.ModelViewSet):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
-class LessonLocationViewSet(viewsets.ModelViewSet):
+    
+class CoursesViewSet(viewsets.ModelViewSet):
+    # не работает
     queryset = LessonLocation.objects.all()
     serializer_class = LessonLocationSerializer
     
-class TypeOfLessonViewSet(viewsets.ModelViewSet):
+class ScheduleViewSet(viewsets.ModelViewSet):
+    # не работает
     queryset = TypeOfLesson.objects.all()
     serializer_class = TypeOfLessonSerializer
     
-class StudentGroupViewSet(viewsets.ModelViewSet):
+class AttendanceViewSet(viewsets.ModelViewSet):
+    # не работает
     queryset = StudentGroup.objects.all()
     serializer_class =  StudentGroupSerializer

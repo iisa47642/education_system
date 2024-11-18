@@ -7,10 +7,17 @@ from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerialize
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer)
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ScheduleViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = CustomUserSerializer
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        queryset = CustomUser.objects.filter(id=id_u)
+        return queryset
 
 class RatingViewSet(viewsets.ModelViewSet):
     # не работает
@@ -31,11 +38,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
     # не работает
     queryset = LessonLocation.objects.all()
     serializer_class = LessonLocationSerializer
-    
-class ScheduleViewSet(viewsets.ModelViewSet):
-    # не работает
-    queryset = TypeOfLesson.objects.all()
-    serializer_class = TypeOfLessonSerializer
+
     
 class AttendanceViewSet(viewsets.ModelViewSet):
     # не работает

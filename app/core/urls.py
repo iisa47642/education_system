@@ -6,7 +6,7 @@ router = routers.DefaultRouter()
 router.register(r'profile', ProfileViewSet, 'profile')
 router.register(r'courses', CoursesViewSet, 'courses')
 router.register(r'course', CourseViewSet, 'course')
-router.register(r'shedule', ScheduleViewSet, 'shedule')
+router.register(r'schedule', ScheduleViewSet, 'schedule')
 router.register(r'typeoflesson', RatingViewSet, 'rating')
 router.register(r'lessonlocation', AttendanceViewSet, 'attendance')
 # URLs настраиваются автоматически роутером

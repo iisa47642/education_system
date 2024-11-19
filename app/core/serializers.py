@@ -2,11 +2,19 @@ from rest_framework import serializers
 from core.models import (CustomUser, Lesson, LessonLocation,
                         Subject, TypeOfLesson, StudentGroup,AdditionalMaterials,Test,ControlWork)
 
+
+class LessonLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LessonLocation
+        fields = ('id', 'name')
+
 class CustomUserSerializer(serializers.ModelSerializer):
+    student_groups = serializers.StringRelatedField(many=True)
+    groups = serializers.StringRelatedField(many=True)
     class Meta:
         model = CustomUser
         fields = ('username','password','birth_date','surname',
-                  'profile','gpa','course','perc','additional_info','groups')
+                  'profile','gpa','course','perc','additional_info','groups','student_groups')
 
 
 # class ControlWorkSerializer(serializers.ModelSerializer):
@@ -32,12 +40,8 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = ('id','name','groups','control_works',
-                  'tests','additional_materials')
+                  'tests','additional_materials','student_groups')
         
-class LessonLocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LessonLocation
-        fields = ('id', 'name')
         
 class TypeOfLessonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,4 +62,4 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ['subjectId','groupId','teacherId',
-                  'number','startTime','endTime','type','location','date']
+                  'lesson_number','week_number','startTime','endTime','type','location','date']

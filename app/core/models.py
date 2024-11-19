@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.contrib.auth.models import Group
 
 
 # Create your models here.
@@ -138,12 +137,14 @@ class Lesson(models.Model):
     subjectId = models.ForeignKey(to=Subject,on_delete=models.CASCADE)
     groupId = models.ManyToManyField(to=StudentGroup, blank=True)
     teacherId = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
-    number = models.IntegerField(null=True)
+    lesson_number = models.IntegerField(null=True)
+    week_number = models.IntegerField(null=True)
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()
     type = models.ForeignKey(TypeOfLesson, on_delete=models.CASCADE)
     location = models.ForeignKey(to=LessonLocation, on_delete=models.CASCADE)
     date = models.DateField()
+    
     
     class Meta:
         db_table = 'lesson'

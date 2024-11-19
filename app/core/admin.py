@@ -9,7 +9,9 @@ from core.models import (CustomUser, Lesson, LessonLocation,
 # Register your models here.
 @admin.register(CustomUser)
 class CategoriesAdmin(admin.ModelAdmin):
+    exclude = ['user_permissions']
     model = CustomUser
+    
 admin.site.register(Lesson)
     
 @admin.register(LessonLocation)
@@ -41,7 +43,7 @@ class TestAdmin(admin.ModelAdmin):
     model = Test
 
 @admin.register(AdditionalMaterials)
-class AdditionalMarerials(admin.ModelAdmin):
+class AdditionalMaterials(admin.ModelAdmin):
     model = AdditionalMaterials
 
 @admin.register(ControlWork)

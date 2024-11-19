@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import Group
 
 
 # Create your models here.
@@ -21,7 +22,8 @@ class CustomUser(AbstractUser):
     additional_info = models.TextField(null=True)
     gpa = models.FloatField(null=True, blank=True)
     perc = models.FloatField(null=True, blank=True)
-    groups = models.ManyToManyField(to=StudentGroup)
+    student_groups = models.ManyToManyField(to=StudentGroup)
+    
     
     class Meta:
         db_table = 'custom_user'

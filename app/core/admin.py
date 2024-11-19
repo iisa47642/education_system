@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from core.models import (CustomUser, Lesson, LessonLocation,
-                         Subject, TypeOfLesson, StudentGroup, LessonArchive, Test, ControlWork, TestMark,
-                         ControlWorkMark,AdditionalMaterials)
+                         Subject, TypeOfLesson, StudentGroup, LessonArchive,
+                         AdditionalMaterials, ControlEvent, TypeOfControlEvent, ControlEventMark)
 
 
 # Register your models here.
@@ -38,22 +38,20 @@ class CategoriesAdmin(admin.ModelAdmin):
 class LessonArchiveAdmin(admin.ModelAdmin):
     model = LessonArchive
 
-@admin.register(Test)
-class TestAdmin(admin.ModelAdmin):
-    model = Test
-
 @admin.register(AdditionalMaterials)
 class AdditionalMaterials(admin.ModelAdmin):
     model = AdditionalMaterials
 
-@admin.register(ControlWork)
-class ControlWorkAdmin(admin.ModelAdmin):
-    model = ControlWork
+@admin.register(TypeOfControlEvent)
+class TypeOfControlEvent(admin.ModelAdmin):
+    model = TypeOfControlEvent
 
-@admin.register(TestMark)
-class TestMarkAdmin(admin.ModelAdmin):
-    model = TestMark
+@admin.register(ControlEventMark)
+class ControlEventMarkAdmin(admin.ModelAdmin):
+    model = ControlEventMark
 
-@admin.register(ControlWorkMark)
-class ControlWorkMarkAdmin(admin.ModelAdmin):
-    model = ControlWorkMark
+@admin.register(ControlEvent)
+class ControlEventAdmin(admin.ModelAdmin):
+    model = ControlEvent
+
+

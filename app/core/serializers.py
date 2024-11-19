@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from core.models import (CustomUser, Lesson, LessonLocation,
-                        Subject, TypeOfLesson, StudentGroup,AdditionalMaterials,Test,ControlWork)
+                        Subject, TypeOfLesson, StudentGroup,AdditionalMaterials)
 
 
 class LessonLocationSerializer(serializers.ModelSerializer):

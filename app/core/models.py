@@ -71,54 +71,44 @@ class LessonLocation(models.Model):
 Model describing lesson
 '''
 
-
-class Test(models.Model):
+class TypeOfControlEvent(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'test'
-        verbose_name = 'Тест'
-        verbose_name_plural = 'Тесты'
+        db_table = 'typeofcontrolevent'
+        verbose_name = 'Тип контрольного мероприятия'
+        verbose_name_plural = 'Типы контрольных мероприятий'
 
     def __str__(self):
         return self.name
 
 
-class ControlWork(models.Model):
+class ControlEvent(models.Model):
     name = models.CharField(max_length=50)
+    type = models.ForeignKey(TypeOfControlEvent, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'controlwork'
-        verbose_name = 'Контрольные работы'
-        verbose_name_plural = 'Контрольные работы'
+        db_table = 'controlevent'
+        verbose_name = 'Kонтрольное мероприятие'
+        verbose_name_plural = 'Контрольные мероприятия'
 
     def __str__(self):
         return self.name
 
-class TestMark(models.Model):
-    testId= models.ForeignKey(Test, on_delete=models.CASCADE)
+class ControlEventMark(models.Model):
+    controlWorkId= models.ForeignKey(ControlEvent, on_delete=models.CASCADE)
     userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     mark = models.IntegerField()
     class Meta:
-        db_table = 'testmark'
-        verbose_name = 'Оценка за тест'
-        verbose_name_plural = 'Оценки за тест'
-
-class ControlWorkMark(models.Model):
-    controlWorkId= models.ForeignKey(ControlWork, on_delete=models.CASCADE)
-    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    mark = models.IntegerField()
-    class Meta:
-        db_table = 'controlworkmarks'
-        verbose_name = 'Оценка за контрольную работу'
-        verbose_name_plural = 'Оценки за контрольные работы'
+        db_table = 'controleventmark'
+        verbose_name = 'Оценка за контрольное мероприятие'
+        verbose_name_plural = 'Оценки за контрольные мероприятия'
 
 
 class Subject(models.Model):
     name = models.CharField(max_length=50)
     groups = models.ManyToManyField(StudentGroup)
-    control_works=models.ManyToManyField(ControlWork)
-    tests=models.ManyToManyField(Test)
+    control_event = models.ForeignKey(ControlEvent, on_delete=models.CASCADE)
     additional_materials = models.ManyToManyField(AdditionalMaterials)
 
     class Meta:

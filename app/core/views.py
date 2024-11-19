@@ -27,10 +27,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return queryset
 
 class RatingViewSet(viewsets.ModelViewSet):
-    # не хватает проверки на то, 
-    # что юзер является учеником
+    
     serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.order_by('-gpa')
+    queryset = CustomUser.objects.filter(groups=1).order_by('-gpa')
 
 
 class CourseViewSet(viewsets.ModelViewSet):

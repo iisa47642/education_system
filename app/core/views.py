@@ -11,7 +11,8 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = LessonSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
-        role = CustomUserSerializer()
+        role = [i.groups for i in CustomUser.objects.filter(id=id_u)]
+        print(role)
         groups = [i.id for i in StudentGroup.objects.filter(students=id_u)]
         queryset = Lesson.objects.filter(groupId__in=groups)
         return queryset

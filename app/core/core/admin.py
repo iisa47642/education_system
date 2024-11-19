@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from core.models import (CustomUser, Lesson, LessonLocation,
                          Subject, TypeOfLesson, StudentGroup, LessonArchive, Test, ControlWork, TestMark,
-                         ControlWorkMark,AdditionalMaterials)
+                         ControlWorkMark)
 
 
 # Register your models here.
@@ -42,8 +42,8 @@ class TestAdmin(admin.ModelAdmin):
     model = Test
 
 @admin.register(AdditionalMaterials)
-class AdditionalMarerials(admin.ModelAdmin):
-    model = AdditionalMaterials
+class TestAdmin(admin.ModelAdmin):
+    model = Test
 
 @admin.register(ControlWork)
 class ControlWorkAdmin(admin.ModelAdmin):

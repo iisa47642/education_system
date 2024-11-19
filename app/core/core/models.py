@@ -26,7 +26,7 @@ class AdditionalMaterials(models.Model):
     content = models.BinaryField()
 
     class Meta:
-        db_table = 'additionalmaterials'
+        db_table = ''
         verbose_name = 'Дополнительный материал'
         verbose_name_plural = 'Дополнительные материалы'
 
@@ -106,7 +106,7 @@ class TestMark(models.Model):
         verbose_name_plural = 'Оценки за тест'
 
 class ControlWorkMark(models.Model):
-    controlWorkId= models.ForeignKey(ControlWork, on_delete=models.CASCADE)
+    testId= models.ForeignKey(Test, on_delete=models.CASCADE)
     userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     mark = models.IntegerField()
     class Meta:

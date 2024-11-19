@@ -10,7 +10,6 @@ from core.models import (CustomUser, Lesson, LessonLocation,
 @admin.register(CustomUser)
 class CategoriesAdmin(admin.ModelAdmin):
     model = CustomUser
-
 admin.site.register(Lesson)
     
 @admin.register(LessonLocation)

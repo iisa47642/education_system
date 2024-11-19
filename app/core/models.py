@@ -3,7 +3,16 @@ from django.db import models
 
 
 # Create your models here.
-
+class StudentGroup(models.Model):
+    name = models.CharField(max_length=50)
+    
+    class Meta:
+        db_table = 'studentgroup'
+        verbose_name = 'Группа студентов'
+        verbose_name_plural = 'Группы студентов'
+        
+    def __str__(self):
+        return self.name
 class CustomUser(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     surname = models.CharField(max_length=50, blank=True)
@@ -12,6 +21,7 @@ class CustomUser(AbstractUser):
     additional_info = models.TextField(null=True)
     gpa = models.FloatField(null=True, blank=True)
     perc = models.FloatField(null=True, blank=True)
+    groups = models.ManyToManyField(to=StudentGroup)
     
     class Meta:
         db_table = 'custom_user'
@@ -60,18 +70,6 @@ class LessonLocation(models.Model):
 Model describing lesson
 '''
 
-class StudentGroup(models.Model):
-    name = models.CharField(max_length=50)
-    students = models.ManyToManyField(CustomUser)
-
-    
-    class Meta:
-        db_table = 'studentgroup'
-        verbose_name = 'Группа студентов'
-        verbose_name_plural = 'Группы студентов'
-        
-    def __str__(self):
-        return self.name
 
 class Test(models.Model):
     name = models.CharField(max_length=50)

@@ -23,23 +23,33 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return queryset
 
 class RatingViewSet(viewsets.ModelViewSet):
+    # не хватает проверки на то, 
+    # что юзер является учеником
     serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.order_by('gpa')
+    queryset = CustomUser.objects.order_by('-gpa')
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    # не работает
-    queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        name = self.request.query_params.get('name')
+        groups = [i.id for i in StudentGroup.objects.filter(students=id_u)]
+        queryset = Subject.objects.filter(groups__in=groups) & Subject.objects.filter(name=name)
+        return queryset
     
     
 class CoursesViewSet(viewsets.ModelViewSet):
-    # не работает
-    queryset = LessonLocation.objects.all()
-    serializer_class = LessonLocationSerializer
+    serializer_class = SubjectSerializer
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        groups = [i.id for i in StudentGroup.objects.filter(students=id_u)]
+        queryset = Subject.objects.filter(groups__in=groups)
+        return queryset
 
     
 class AttendanceViewSet(viewsets.ModelViewSet):
     # не работает
+    
     queryset = StudentGroup.objects.all()
     serializer_class =  StudentGroupSerializer

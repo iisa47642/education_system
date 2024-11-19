@@ -7,7 +7,7 @@ router.register(r'profile', ProfileViewSet, 'profile')
 router.register(r'courses', CoursesViewSet, 'courses')
 router.register(r'course', CourseViewSet, 'course')
 router.register(r'schedule', ScheduleViewSet, 'schedule')
-router.register(r'typeoflesson', RatingViewSet, 'rating')
-router.register(r'lessonlocation', AttendanceViewSet, 'attendance')
+router.register(r'rating', RatingViewSet, 'rating')
+router.register(r'attendance', AttendanceViewSet, 'attendance')
 # URLs настраиваются автоматически роутером
 urlpatterns = router.urls

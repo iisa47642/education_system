@@ -41,6 +41,10 @@ class LessonArchiveAdmin(admin.ModelAdmin):
 class TestAdmin(admin.ModelAdmin):
     model = Test
 
+@admin.register(AdditionalMaterials)
+class TestAdmin(admin.ModelAdmin):
+    model = Test
+
 @admin.register(ControlWork)
 class ControlWorkAdmin(admin.ModelAdmin):
     model = ControlWork

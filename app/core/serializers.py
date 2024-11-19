@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from core.models import (CustomUser, Lesson, LessonLocation,
-                        Subject, TypeOfLesson, StudentGroup,AdditionalMaterials)
+                        Subject, TypeOfLesson, StudentGroup,AdditionalMaterials,
+                        ControlEvent,ControlEventMark,TypeOfControlEvent)
 
 
 class LessonLocationSerializer(serializers.ModelSerializer):
@@ -31,16 +32,24 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = AdditionalMaterials
 #         fields = ('id', 'name', 'content')
-
+class TypeOfControlEventSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = ControlEvent
+        fields = ('id','name')
+class ControlEventSerializer(serializers.ModelSerializer):
+    type = TypeOfControlEventSerializer()
+    class Meta:
+        model = ControlEvent
+        fields = ('id','name','type')
 class SubjectSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
-    tests = serializers.StringRelatedField(many=True)
-    control_works = serializers.StringRelatedField(many=True)
     additional_materials = serializers.StringRelatedField(many=True)
+    control_event = ControlEventSerializer()
+    # control_event = ControlEventSerializer
     class Meta:
         model = Subject
-        fields = ('id','name','groups','control_works',
-                  'tests','additional_materials','student_groups')
+        fields = ('id','name','groups',
+                  'additional_materials','control_event')
         
         
 class TypeOfLessonSerializer(serializers.ModelSerializer):

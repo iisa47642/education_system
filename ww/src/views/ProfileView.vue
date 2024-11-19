@@ -24,6 +24,9 @@
             },
             goCourses(id) {
                 this.$router.push({name: "courses", params: {id: id}});
+            },
+            goShedule(id) {
+                this.$router.push({name: "shedule", params: {id: id}})
             }
         },
         mounted() {
@@ -39,11 +42,10 @@
                     <h2>Привет, студент!</h2>
                     <h3>ww.study <br> cabinet</h3>
                     <ul class="left__menu">
-                        <li><a @click="goCourses(this.id)"><span>мои курсы</span></a></li>
-                        <li><a><span>мое расписание</span></a></li>
-                        <li><a><span>посещаемость</span></a></li>
-                        <li><a><span>рейтинг</span></a></li>
-                        <li><a><span>настройки</span></a></li>
+                        <li id="one"><a @click="goCourses(this.id)"><span>мои курсы</span></a></li>
+                        <li id="two"><a @click="goShedule(this.id)"><span>мое расписание</span></a></li>
+                        <li id="three"><a><span>рейтинг</span></a></li>
+                        <li id="four"><a><span>настройки</span></a></li>
                     </ul>
                 </div>
                 <div class="profile__right">
@@ -118,7 +120,6 @@
     }
 
     .left__menu {
-        border-left: 2px solid #fff;
         padding: 10px 0 10px 30px;
     }
 
@@ -130,6 +131,33 @@
         cursor: pointer;
         display: block;
         line-height: 1;
+        padding-left: 120px;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .left__menu a:before {
+        content: '';
+        width: 80px;
+        height: 90px;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        border-right: 2px solid #fff;
+    }
+
+    #one a:before {
+        background: url(../assets/icons/bundle2.png) 0 50% no-repeat;
+    }
+    #two a:before {
+        background: url(../assets/icons/hat2.png) 0 50% no-repeat;
+    }
+    #three a:before {
+        background: url(../assets/icons/stars.png) 0 50% no-repeat;
+    }
+    #four a:before {
+        background: url(../assets/icons/wheel.png) 0 50% no-repeat;
     }
     .left__menu li:not(:last-child) {
         padding-bottom: 20px;

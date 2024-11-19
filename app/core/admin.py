@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from core.models import (CustomUser, Lesson, LessonLocation,
-                         Subject, TypeOfLesson, StudentGroup, LessonArchive, Test, ControlWork)
+                         Subject, TypeOfLesson, StudentGroup, LessonArchive, Test, ControlWork, TestMark,
+                         ControlWorkMark)
 
 
 # Register your models here.
@@ -41,5 +42,13 @@ class TestAdmin(admin.ModelAdmin):
     model = Test
 
 @admin.register(ControlWork)
-class ControlWork(admin.ModelAdmin):
+class ControlWorkAdmin(admin.ModelAdmin):
     model = ControlWork
+
+@admin.register(TestMark)
+class TestMarkAdmin(admin.ModelAdmin):
+    model = TestMark
+
+@admin.register(ControlWorkMark)
+class ControlWorkMarkAdmin(admin.ModelAdmin):
+    model = ControlWorkMark

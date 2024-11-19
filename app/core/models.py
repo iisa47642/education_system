@@ -96,6 +96,25 @@ class ControlWork(models.Model):
     def __str__(self):
         return self.name
 
+class TestMark(models.Model):
+    testId= models.ForeignKey(Test, on_delete=models.CASCADE)
+    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    mark = models.IntegerField()
+    class Meta:
+        db_table = 'testmark'
+        verbose_name = 'Оценка за тест'
+        verbose_name_plural = 'Оценки за тест'
+
+class ControlWorkMark(models.Model):
+    testId= models.ForeignKey(Test, on_delete=models.CASCADE)
+    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    mark = models.IntegerField()
+    class Meta:
+        db_table = 'controlworkmarks'
+        verbose_name = 'Оценка за контрольную работу'
+        verbose_name_plural = 'Оценки за контрольные работы'
+
+
 class Subject(models.Model):
     name = models.CharField(max_length=50)
     groups = models.ManyToManyField(StudentGroup)

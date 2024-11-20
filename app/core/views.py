@@ -33,7 +33,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     #готово
     serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.filter(groups__name__icontains='student').order_by('-gpa')
+    queryset = CustomUser.objects.filter(groups__name__icontains='student').order_by('-perc')
 
 
 class CourseViewSet(viewsets.ModelViewSet):

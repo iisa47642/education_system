@@ -70,7 +70,8 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ['subjectId','groupId','teacherId',
-                  'lesson_number','week_number','startTime','endTime','type','location','date']
+                  'lesson_number','week_number','week_day_number','startTime','endTime','type',
+                  'location','date']
         
 class LessonArchiveSerializer(serializers.ModelSerializer):
     lessonId = LessonSerializer()

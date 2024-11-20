@@ -134,6 +134,7 @@ class Lesson(models.Model):
     teacherId = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE , null=True, blank=True, default=1)  # link to tutor
     lesson_number = models.IntegerField(null=True)
     week_number = models.IntegerField(null=True)
+    week_day_number = models.IntegerField(null=True)
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()
     type = models.ForeignKey(TypeOfLesson, on_delete=models.CASCADE)

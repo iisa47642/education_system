@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.models import (CustomUser, Lesson, LessonLocation,
                         Subject, TypeOfLesson, StudentGroup,AdditionalMaterials,
-                        ControlEvent,ControlEventMark,TypeOfControlEvent)
+                        ControlEvent,ControlEventMark,TypeOfControlEvent,LessonArchive)
 
 
 class LessonLocationSerializer(serializers.ModelSerializer):
@@ -32,20 +32,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = AdditionalMaterials
 #         fields = ('id', 'name', 'content')
-class TypeOfControlEventSerializer(serializers.ModelSerializer):
-     class Meta:
-        model = ControlEvent
-        fields = ('id','name')
-class ControlEventSerializer(serializers.ModelSerializer):
-    type = TypeOfControlEventSerializer()
-    class Meta:
-        model = ControlEvent
-        fields = ('id','name','type')
+# class TypeOfControlEventSerializer(serializers.ModelSerializer):
+#      class Meta:
+#         model = ControlEvent
+#         fields = ('id','name')
+# class ControlEventSerializer(serializers.ModelSerializer):
+#     type = TypeOfControlEventSerializer()
+#     class Meta:
+#         model = ControlEvent
+#         fields = ('id','name','type')
 class SubjectSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     additional_materials = serializers.StringRelatedField(many=True)
-    control_event = ControlEventSerializer()
-    # control_event = ControlEventSerializer
+    control_event = serializers.StringRelatedField(many=True)
     class Meta:
         model = Subject
         fields = ('id','name','groups',
@@ -72,3 +71,29 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = ['subjectId','groupId','teacherId',
                   'lesson_number','week_number','startTime','endTime','type','location','date']
+        
+class LessonArchiveSerializer(serializers.ModelSerializer):
+    lessonId = LessonSerializer()
+    userId = CustomUserSerializer()
+    class Meta:
+        model = LessonArchive
+        fields = ('id', 'lessonId','userId','attendance')
+
+class TypeOfControlEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypeOfControlEvent
+        fields = ('id', 'name')
+    
+class ControlEventSerializer(serializers.ModelSerializer):
+    type = TypeOfControlEventSerializer()
+    class Meta:
+        model = ControlEvent
+        fields = ('id', 'name','type')
+    
+class MarksSerializer(serializers.ModelSerializer):
+    controlWorkId= ControlEventSerializer()
+    userId = CustomUserSerializer()
+    class Meta:
+        model = ControlEventMark 
+        fields = ('id', 'controlWorkId','mark')
+    

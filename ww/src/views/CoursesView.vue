@@ -3,6 +3,7 @@
     export default {
         data() {
             return {
+                userId: this.$route.params.id,
                 courses: [
                     {
                         title: "Математический Анализ",
@@ -28,21 +29,22 @@
                         title: "Предмет 6",
                         image: ""
                     }
-                ]
+                ],
+                courses2: []
             }
         },
         methods: {
-            async loadData(id, token) {
-                let response = await axios.get("/getCourses", { params: {
-                    id: id,
-                    token: token
-                    // courses = response.data;
+            async loadData(id) {
+                let response = await axios.get("/courses", { params: {
+                    id: id
                 }
                 });
+                this.courses2 = response.data;
+                console.log(response.data);
             }
         },
         mounted() {
-            this.loadData();
+            this.loadData(this.userId);
         }
     }
 </script>
@@ -54,14 +56,14 @@
                     <h2 class="courses__title">Мои курсы</h2>
                 </div>
             <div class="courses__row">
-                <div v-for="item,index in courses" class="courses__item course">
+                <div v-for="item,index in courses2" class="courses__item course">
                         <div class="course__body">
                             <div class="course__img">
                 
                             <img src="../assets/imgs/image.png" alt="">
                         </div>
                         <div class="course__title">
-                            <p>{{ item.title }}</p>
+                            <p>{{ item.name }}</p>
                         </div>
                         </div>
                 </div>

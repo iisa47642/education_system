@@ -1,413 +1,88 @@
 <script>
     import dayjs from "dayjs";
+    import axios from "axios";
     import "dayjs/locale/ru";
     dayjs.locale("ru");
 
     export default {
         data() {
             return {
-                date: dayjs(),
-                shedule: [
+                date: dayjs().format("DD.MM.YYYY"),
+                userId: this.$route.params.id,
+                weekNumber: 1,
+                schedule: [
                     {
                         day: "Monday",
-                        subjects: [
-                            {
-                                title: "название занятия №1",
-                                startTime: "9:00",
-                                endTime: "10:30",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №2",
-                                startTime: "10:40",
-                                endTime: "12:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №3",
-                                startTime: "12:40",
-                                endTime: "14:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №4",
-                                startTime: "14:20",
-                                endTime: "15:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №5",
-                                startTime: "16:20",
-                                endTime: "17:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №6",
-                                startTime: "18:00",
-                                endTime: "19:30",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №7",
-                                startTime: "19:40",
-                                endTime: "21:10",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №8",
-                                startTime: "21:20",
-                                endTime: "22:50",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                        ]
+                        subjects: [],
+                        today: false,
                     },
                     {
                         day: "Tuesday",
-                        subjects: [
-                            {
-                                title: "название занятия №1",
-                                startTime: "9:00",
-                                endTime: "10:30",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №2",
-                                startTime: "10:40",
-                                endTime: "12:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №3",
-                                startTime: "12:40",
-                                endTime: "14:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №4",
-                                startTime: "14:20",
-                                endTime: "15:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №5",
-                                startTime: "16:20",
-                                endTime: "17:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №6",
-                                startTime: "18:00",
-                                endTime: "19:30",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №7",
-                                startTime: "19:40",
-                                endTime: "21:10",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №8",
-                                startTime: "21:20",
-                                endTime: "22:50",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                        ]
+                        subjects: [],
+                        today: false,
                     },
                     {
                         day: "Wednesday",
-                        subjects: [
-                            {
-                                title: "название занятия №1",
-                                startTime: "9:00",
-                                endTime: "10:30",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №2",
-                                startTime: "10:40",
-                                endTime: "12:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №3",
-                                startTime: "12:40",
-                                endTime: "14:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №4",
-                                startTime: "14:20",
-                                endTime: "15:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №5",
-                                startTime: "16:20",
-                                endTime: "17:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №6",
-                                startTime: "18:00",
-                                endTime: "19:30",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №7",
-                                startTime: "19:40",
-                                endTime: "21:10",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №8",
-                                startTime: "21:20",
-                                endTime: "22:50",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                        ]
+                        subjects: [],
+                        today: false,
                     },
                     {
-                        day: "Thurdsay",
-                        subjects: [
-                            {
-                                title: "название занятия №1",
-                                startTime: "9:00",
-                                endTime: "10:30",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №2",
-                                startTime: "10:40",
-                                endTime: "12:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №3",
-                                startTime: "12:40",
-                                endTime: "14:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №4",
-                                startTime: "14:20",
-                                endTime: "15:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №5",
-                                startTime: "16:20",
-                                endTime: "17:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №6",
-                                startTime: "18:00",
-                                endTime: "19:30",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №7",
-                                startTime: "19:40",
-                                endTime: "21:10",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №8",
-                                startTime: "21:20",
-                                endTime: "22:50",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                        ]
+                        day: "Thurday",
+                        subjects: [],
+                        today: false,
                     },
                     {
                         day: "Friday",
-                        subjects: [
-                            {
-                                title: "название занятия №1",
-                                startTime: "9:00",
-                                endTime: "10:30",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №2",
-                                startTime: "10:40",
-                                endTime: "12:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №3",
-                                startTime: "12:40",
-                                endTime: "14:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №4",
-                                startTime: "14:20",
-                                endTime: "15:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №5",
-                                startTime: "16:20",
-                                endTime: "17:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №6",
-                                startTime: "18:00",
-                                endTime: "19:30",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №7",
-                                startTime: "19:40",
-                                endTime: "21:10",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                            {
-                                title: "название занятия №8",
-                                startTime: "21:20",
-                                endTime: "22:50",
-                                class: "209a",
-                                visited: false,
-                                elective: true,
-                            },
-                        ]
+                        subjects: [],
+                        today: false,
                     },
                     {
                         day: "Saturday",
-                        subjects: [
-                            {
-                                title: "название занятия №1",
-                                startTime: "9:00",
-                                endTime: "10:30",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №2",
-                                startTime: "10:40",
-                                endTime: "12:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №3",
-                                startTime: "12:40",
-                                endTime: "14:10",
-                                class: "209a",
-                                visited: true,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №4",
-                                startTime: "14:20",
-                                endTime: "15:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                            {
-                                title: "название занятия №5",
-                                startTime: "16:20",
-                                endTime: "17:50",
-                                class: "209a",
-                                visited: false,
-                                elective: false,
-                            },
-                        ]
-                    }
-                ]
+                        subjects: [],
+                        today: false,
+                    },
+                ],
             }
         },
         methods: {
             getDate(date) {
                 console.log(date);
+            },
+            createShedule(s) {
+                for (let i = 0; i < s.length; i++) {
+                    if (s[i].week_number == this.weekNumber) {
+                        this.schedule[s[i].week_day_number-1].subjects.push(
+                            {
+                                name: s[i].subjectId.name,
+                                startTime: dayjs(s[i].startTime).format("HH:mm"),
+                                endTime: dayjs(s[i].endTime).format("HH:mm"),
+                                location: s[i].location.name,
+                                order: s[i].lesson_number
+                            }
+                        )
+                    } else {
+                        console.log(this.weekNumber);
+                        console.log(s.week_number);
+                    }
+                }
+                for (let i = 0; i < 6; i++) {
+                    this.schedule[i].subjects.sort(function(a, b) {
+                    return parseFloat(a.order) - parseFloat(b.order);
+                    });
+                }
+            },
+            async loadData(id) {
+                let response = await axios.get("/schedule", {
+                    params: {id: id}
+                });
+                this.createShedule(response.data);
+                console.log(response.data);
             }
         },
         mounted() {
             this.getDate(this.date);
+            this.loadData(this.userId);
+    
         }
     }
 </script>
@@ -419,41 +94,41 @@
                     <h2>мое расписание</h2>
                 </div>
                 <div class="shedule__subtitle">
-                    <h3>идёт 2 учебная неделя (чёт.) 11.09.2024</h3>
+                    <h3>идёт {{this.weekNumber}} учебная неделя (нечёт.) {{this.date}}</h3>
                 </div>
                 <div class="shedule__col">
-                    <div v-for="day, index in shedule"  class="day">
-                        <h3>{{ day.day }}</h3>
+                    <div v-for="item, index in schedule" class="day">
+                        <h3>{{item.day}}</h3>
                         <div class="day__block">
                             <div class="day__row">
                                 <div class="day__left">
-                                    <div v-for="subject,index in day.subjects" class="left__item">
-                                        <div class="subject non-elective" v-if="!subject.elective">
+                                    <div class="left__item">
+                                        <div v-for="subject, ind in item.subjects"  class="subject non-elective">
                                             <h4 class="subject__title">
-                                                {{ subject.title }}
+                                                {{ subject.name }}
                                             </h4>
                                             <div class="subject__time">
                                                 {{ subject.startTime }}-{{ subject.endTime }}
                                             </div>
                                             <div class="subject__class">
-                                                {{ subject.class }}
+                                                {{subject.location}}
                                             </div>
-                                            <div :class="{subject__visited: true, visited: subject.visited}">
+                                            <div class="subject__visited">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="day__right">
-                                    <div v-for="subject,index in day.subjects" class="right__item">
-                                        <div v-if="subject.elective" class="subject elective">
+                                    <div class="right__item">
+                                        <div class="subject elective">
                                             <div class="subject__title">
-                                                {{ subject.title }}
+                                                
                                             </div>
                                             <div class="subject__time">
-                                                {{ subject.startTime }}-{{ subject.endTime }}
+                                                
                                             </div>
                                             <div class="subject__class">
-                                                {{ subject.class }}
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -551,6 +226,8 @@
     .subject__title {
         font-weight: 700;
         line-height: 1;
+        flex: 0 1 40%;
+        overflow: hidden;
     }
 
     .subject__visited {

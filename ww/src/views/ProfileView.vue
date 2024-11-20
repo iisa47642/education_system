@@ -11,15 +11,17 @@
                 info: "информация",
                 gpa: 87,
                 perc: 94,
-                image: ""
+                image: "",
+                user: {}
             }
         },
         methods: {
             // типо подгрузка данных
-            async loadData() {
-                let data = await axios.get("/route", {
+            async loadData(id) {
+                let data = await axios.get("/profile", {
                     params: {id: id}
                 });
+                this.user = data.data[0];
                 console.log(data);
             },
             goCourses(id) {
@@ -30,7 +32,7 @@
             }
         },
         mounted() {
-            this.loadData();
+            this.loadData(this.userId);
         }
     }
 </script>
@@ -54,23 +56,23 @@
                             <img src="" alt="">
                         </div>
                     </div>
-                    <h3>{{ this.name }}</h3>
+                    <h3>{{ this.user.username }} {{ this.user.surname }}</h3>
                     <div class="right__info">
-                        <p>Дата рождения: {{ this.birthdate }}</p>
-                        <p>Профиль: {{ this.degree }}</p>
+                        <p>Дата рождения: {{ this.user.birthdate }}</p>
+                        <p>Профиль: {{ this.user.profile }}</p>
                         <p>Курс: {{ this.course }}</p>
-                        <p>Др. Информация: {{ this.info }}</p>
+                        <p>Др. Информация: {{ this.user.course }}</p>
                     </div>
                     <div class="right__grade">
                         <h3>Успеваемость</h3>
                         <div class="grade__row">
                             <div class="grade__col">
                                 <p>gpa</p>
-                                <span>{{ this.gpa }}%</span>
+                                <span>{{ this.user.gpa }}%</span>
                             </div>
                             <div class="grade__col">
                                 <p>perc</p>
-                                <span>{{ this.perc }}%</span>
+                                <span>{{ this.user.perc }}%</span>
                             </div>
                         </div>
                     </div>

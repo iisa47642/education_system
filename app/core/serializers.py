@@ -8,14 +8,21 @@ class LessonLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonLocation
         fields = ('id', 'name')
-
+class CustomUserRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('username','password','email')
 class CustomUserSerializer(serializers.ModelSerializer):
+
     student_groups = serializers.StringRelatedField(many=True)
+    groups = serializers.StringRelatedField(many=True)
     groups = serializers.StringRelatedField(many=True)
     class Meta:
         model = CustomUser
         fields = ('username','password','birth_date','surname',
-                  'profile','gpa','course','perc','additional_info','groups','student_groups')
+                  'profile','gpa','course','perc','additional_info','groups','student_groups','email')
+        # fields = ('username','password',
+        #           'email')
 
 
 # class ControlWorkSerializer(serializers.ModelSerializer):

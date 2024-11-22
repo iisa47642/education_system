@@ -129,13 +129,13 @@ class AttendanceViewSet(viewsets.ModelViewSet):
         queryset = LessonArchive.objects.filter(id=id_u)
         return queryset
     
-class MarksViewSet(viewsets.ModelViewSet):
-    # не работает нормально
-    serializer_class = SubjectSerializer
-    def get_queryset(self):
-        id_u = self.request.query_params.get('id')
-        query_groups = [j.all() for j in [i.student_groups for i in CustomUser.objects.filter(id=id_u)]][0]
-        groups = [i.id for i in query_groups]
-        queryset = Subject.objects.filter(groups__in=groups)
-        return queryset
+# class MarksViewSet(viewsets.ModelViewSet):
+#     # не работает нормально
+#     serializer_class = SubjectSerializer
+#     def get_queryset(self):
+#         id_u = self.request.query_params.get('id')
+#         query_groups = [j.all() for j in [i.student_groups for i in CustomUser.objects.filter(id=id_u)]][0]
+#         groups = [i.id for i in query_groups]
+#         queryset = Subject.objects.filter(groups__in=groups)
+#         return queryset
     

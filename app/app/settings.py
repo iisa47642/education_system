@@ -56,6 +56,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 SIMPLE_JWT = {
 
     'ROTATE_REFRESH_TOKENS': True,
@@ -65,7 +66,16 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
+    "ALGORITHM": "HS256",
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=30),
 }
 
 MIDDLEWARE = [

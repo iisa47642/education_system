@@ -12,6 +12,15 @@ class CustomUserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('username','password','email')
+        
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            validated_data['username'],
+            validated_data['email'],
+            validated_data['password']
+        )
+        user.set_password(validated_data['password'])
+        return user
 class CustomUserSerializer(serializers.ModelSerializer):
 
     student_groups = serializers.StringRelatedField(many=True)

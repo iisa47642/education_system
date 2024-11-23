@@ -136,9 +136,8 @@ class AttendanceViewSet(viewsets.ModelViewSet):
         id_u = self.request.query_params.get('id')
         queryset = LessonArchive.objects.filter(id=id_u)
         return queryset
-    
+
 class ControlEventMarkViewSet(viewsets.ModelViewSet):
-    # не работает нормально
     serializer_class = ControlEventMarkSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')

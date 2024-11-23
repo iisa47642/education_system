@@ -34,7 +34,8 @@ class CustomUser(AbstractUser):
 
 class AdditionalMaterials(models.Model):
     name = models.CharField(max_length=50)
-    content = models.BinaryField()
+    content = models.FileField(upload_to='additional_materials/')
+
 
     class Meta:
         db_table = 'additionalmaterials'

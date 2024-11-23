@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
 
 class AdditionalMaterials(models.Model):
     name = models.CharField(max_length=50)
-    content = models.FileField(upload_to='additional_materials/')
+    content = models.FileField(upload_to='additional_materials')
 
 
     class Meta:
@@ -88,6 +88,7 @@ class Subject(models.Model):
     groups = models.ManyToManyField(StudentGroup)
     # control_event = models.ManyToManyField(to=ControlEvent)
     additional_materials = models.ManyToManyField(AdditionalMaterials)
+    is_elective = models.BooleanField(null=True)
     class Meta:
         db_table = 'subject'
         verbose_name = 'Предмет'

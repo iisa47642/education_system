@@ -64,7 +64,7 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = ('id','name','groups',
-                  'additional_materials')
+                  'additional_materials','is_elective')
         
         
 class TypeOfLessonSerializer(serializers.ModelSerializer):
@@ -114,3 +114,15 @@ class ControlEventMarkSerializer(serializers.ModelSerializer):
         model = ControlEventMark 
         fields = ('id','controlWorkId','mark')
     
+class CreateMarksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ControlEventMark
+        fields = ('controlWorkId','userId','mark')
+        
+    def create(self, validated_data):
+        mark = CustomUser.objects.create(
+            validated_data['controlWorkId'],
+            validated_data['userId'],
+            validated_data['mark']
+        )
+        return mark

@@ -8,7 +8,7 @@ from core.models import (CustomUser, Lesson, LessonLocation,
                         Subject, TypeOfLesson, StudentGroup,LessonArchive, ControlEventMark, ControlEvent)
 from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,ControlEventMarkSerializer,
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer,
-                          LessonArchiveSerializer,CustomUserRegistrationSerializer)
+                          LessonArchiveSerializer,CustomUserRegistrationSerializer, CreateMarksSerializer)
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.permissions import IsAuthenticated,AllowAny
 # from core.permissions import Id
@@ -145,4 +145,10 @@ class ControlEventMarkViewSet(viewsets.ModelViewSet):
         c = [i.id for i in ControlEvent.objects.filter(subjectId=ids)]
         queryset =  ControlEventMark.objects.filter(userId=id_u) & ControlEventMark.objects.filter(controlWorkId__in=c)
         return queryset
-    
+
+class CreateMarksAPIView(APIView):
+    def post(self, request):
+        serializer = CreateMarksSerializer(data=request.data)
+        if serializer.is_valid():
+            mark = serializer.save()
+            return Response(status=status.HTTP_201_CREATED)

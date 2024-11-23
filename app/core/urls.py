@@ -13,6 +13,7 @@ router.register(r'rating', RatingViewSet, 'rating')
 router.register(r'attendance', AttendanceViewSet, 'attendance')
 router.register(r'marks',ControlEventMarkViewSet, 'marks')
 
+
 # router.register(r'marks', MarksViewSet, 'marks')
 
 # URLs настраиваются автоматически роутером

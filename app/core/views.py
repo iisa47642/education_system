@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import (CustomUser, Lesson, LessonLocation,
-                        Subject, TypeOfLesson, StudentGroup,LessonArchive, ControlEventMark)
+                        Subject, TypeOfLesson, StudentGroup,LessonArchive, ControlEventMark, ControlEvent)
 from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,ControlEventMarkSerializer,
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer,
                           LessonArchiveSerializer,CustomUserRegistrationSerializer)
@@ -143,8 +143,7 @@ class ControlEventMarkViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
         ids = self.request.query_params.get('ids')
-        conids = [j.all() for j in [i.control_event for i in Subject.objects.filter(id=ids)]][0]
-        c = [i.id for i in conids]
+        c = [i.id for i in ControlEvent.objects.filter(subjectId=ids)]
         queryset =  ControlEventMark.objects.filter(userId=id_u) & ControlEventMark.objects.filter(controlWorkId__in=c)
         return queryset
     

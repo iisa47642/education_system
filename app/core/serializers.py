@@ -60,11 +60,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class SubjectSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     additional_materials = serializers.StringRelatedField(many=True)
-    control_event = serializers.StringRelatedField(many=True)
+    # control_event = serializers.StringRelatedField(many=True)
     class Meta:
         model = Subject
         fields = ('id','name','groups',
-                  'additional_materials','control_event')
+                  'additional_materials')
         
         
 class TypeOfLessonSerializer(serializers.ModelSerializer):
@@ -112,5 +112,5 @@ class ControlEventMarkSerializer(serializers.ModelSerializer):
     # userId = CustomUserSerializer()
     class Meta:
         model = ControlEventMark 
-        fields = ('controlWorkId','mark')
+        fields = ('id','controlWorkId','mark')
     

@@ -82,21 +82,18 @@ class TypeOfControlEvent(models.Model):
     def __str__(self):
         return self.name
 
-class ControlEventMark(models.Model):
-    controlWorkId= models.ForeignKey(ControlEvent, on_delete=models.CASCADE)
-    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    mark = models.IntegerField()
-    class Meta:
-        db_table = 'controleventmark'
-        verbose_name = 'Оценка за контрольное мероприятие'
-        verbose_name_plural = 'Оценки за контрольные мероприятия'
-
-
 class Subject(models.Model):
     name = models.CharField(max_length=50)
     groups = models.ManyToManyField(StudentGroup)
     # control_event = models.ManyToManyField(to=ControlEvent)
     additional_materials = models.ManyToManyField(AdditionalMaterials)
+    class Meta:
+        db_table = 'subject'
+        verbose_name = 'Предмет'
+        verbose_name_plural = 'Предметы'
+    
+    def __str__(self):
+        return self.name
     
 
 class ControlEvent(models.Model):
@@ -110,16 +107,18 @@ class ControlEvent(models.Model):
         verbose_name_plural = 'Контрольные мероприятия'
 
     def __str__(self):
-        return self.name
+        return f'{self.name} ({self.subjectId})'
 
+class ControlEventMark(models.Model):
+    controlWorkId= models.ForeignKey(ControlEvent, on_delete=models.CASCADE)
+    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    mark = models.IntegerField()
     class Meta:
-        db_table = 'subject'
-        verbose_name = 'Предмет'
-        verbose_name_plural = 'Предметы'
+        db_table = 'controleventmark'
+        verbose_name = 'Оценка за контрольное мероприятие'
+        verbose_name_plural = 'Оценки за контрольные мероприятия'
 
 
-    def __str__(self):
-        return self.name
 
 
 

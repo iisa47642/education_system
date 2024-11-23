@@ -82,24 +82,6 @@ class TypeOfControlEvent(models.Model):
     def __str__(self):
         return self.name
 
-
-class ControlEvent(models.Model):
-    name = models.CharField(max_length=50)
-    type = models.ForeignKey(TypeOfControlEvent, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'controlevent'
-        verbose_name = 'Kонтрольное мероприятие'
-        verbose_name_plural = 'Контрольные мероприятия'
-
-    class Meta:
-        db_table = 'controlevent'
-        verbose_name = 'Kонтрольное мероприятие'
-        verbose_name_plural = 'Контрольные мероприятия'
-
-    def __str__(self):
-        return self.name
-
 class ControlEventMark(models.Model):
     controlWorkId= models.ForeignKey(ControlEvent, on_delete=models.CASCADE)
     userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -113,8 +95,22 @@ class ControlEventMark(models.Model):
 class Subject(models.Model):
     name = models.CharField(max_length=50)
     groups = models.ManyToManyField(StudentGroup)
-    control_event = models.ManyToManyField(to=ControlEvent)
+    # control_event = models.ManyToManyField(to=ControlEvent)
     additional_materials = models.ManyToManyField(AdditionalMaterials)
+    
+
+class ControlEvent(models.Model):
+    name = models.CharField(max_length=50)
+    type = models.ForeignKey(TypeOfControlEvent, on_delete=models.CASCADE)
+    subjectId = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'controlevent'
+        verbose_name = 'Kонтрольное мероприятие'
+        verbose_name_plural = 'Контрольные мероприятия'
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'subject'

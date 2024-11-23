@@ -107,10 +107,10 @@ class ControlEventSerializer(serializers.ModelSerializer):
         model = ControlEvent
         fields = ('id', 'name','type')
     
-class MarksSerializer(serializers.ModelSerializer):
-    controlWorkId= ControlEventSerializer()
-    userId = CustomUserSerializer()
+class ControlEventMarkSerializer(serializers.ModelSerializer):
+    controlWorkId = ControlEventSerializer()
+    # userId = CustomUserSerializer()
     class Meta:
         model = ControlEventMark 
-        fields = ('id', 'controlWorkId','mark')
+        fields = ('controlWorkId','mark')
     

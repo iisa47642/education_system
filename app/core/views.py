@@ -5,17 +5,21 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import (CustomUser, Lesson, LessonLocation,
-                        Subject, TypeOfLesson, StudentGroup,LessonArchive)
-from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,
+                        Subject, TypeOfLesson, StudentGroup,LessonArchive, ControlEventMark)
+from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,ControlEventMarkSerializer,
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer,
                           LessonArchiveSerializer,CustomUserRegistrationSerializer)
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.permissions import IsAuthenticated,AllowAny
+# from core.permissions import Id
+from rest_framework import permissions
 
-
-
+class Id(permissions.BasePermission):
+    
+    def has_object_permission(self, request, view, obj):
+        id_u = self.request.query_params.get('id')
+        return str(self.request.user) == str(CustomUser.objects.get(id=id_u).username)
 class RegistrationAPIView(APIView):
-    permission_classes = [AllowAny]
     def post(self, request):
         serializer = CustomUserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -27,14 +31,11 @@ class RegistrationAPIView(APIView):
             })
             return Response({
                 'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'user_id': user.id              # Отправка на клиент
+                'access': str(refresh.access_token),       # Отправка на клиент
             }, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(APIView):
-
-    
     def post(self, request):
         data = request.data
         username = data.get('username', None)
@@ -57,7 +58,7 @@ class LoginAPIView(APIView):
         }, status=status.HTTP_200_OK)
         
 class LogoutAPIView(APIView):
-    
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         refresh_token = request.data.get('refresh_token') # С клиента нужно отправить refresh token
         if not refresh_token:
@@ -86,20 +87,25 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 class ProfileViewSet(viewsets.ModelViewSet):
     # готово
+    ermission_classes = [IsAuthenticated]
     serializer_class = CustomUserSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
-        queryset = CustomUser.objects.filter(id=id_u)
-        return queryset
+        if str(self.request.user) == str(CustomUser.objects.get(id=id_u).username):
+            queryset = CustomUser.objects.filter(id=id_u)
+            return queryset
+            
 
 class RatingViewSet(viewsets.ModelViewSet):
     #готово
+    permission_classes = [IsAuthenticated]
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.filter(groups__name__icontains='student').order_by('-perc')
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     # готово
+    permission_classes = [IsAuthenticated]
     serializer_class = SubjectSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
@@ -112,6 +118,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     
 class CoursesViewSet(viewsets.ModelViewSet):
     # готово
+    permission_classes = [IsAuthenticated]
     serializer_class = SubjectSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
@@ -123,19 +130,21 @@ class CoursesViewSet(viewsets.ModelViewSet):
     
 class AttendanceViewSet(viewsets.ModelViewSet):
     #готово
+    permission_classes = [IsAuthenticated]
     serializer_class = LessonArchiveSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
         queryset = LessonArchive.objects.filter(id=id_u)
         return queryset
     
-# class MarksViewSet(viewsets.ModelViewSet):
-#     # не работает нормально
-#     serializer_class = SubjectSerializer
-#     def get_queryset(self):
-#         id_u = self.request.query_params.get('id')
-#         query_groups = [j.all() for j in [i.student_groups for i in CustomUser.objects.filter(id=id_u)]][0]
-#         groups = [i.id for i in query_groups]
-#         queryset = Subject.objects.filter(groups__in=groups)
-#         return queryset
+class ControlEventMarkViewSet(viewsets.ModelViewSet):
+    # не работает нормально
+    serializer_class = ControlEventMarkSerializer
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        ids = self.request.query_params.get('ids')
+        conids = [j.all() for j in [i.control_event for i in Subject.objects.filter(id=ids)]][0]
+        c = [i.id for i in conids]
+        queryset =  ControlEventMark.objects.filter(userId=id_u) & ControlEventMark.objects.filter(controlWorkId__in=c)
+        return queryset
     

@@ -11,7 +11,6 @@ from core.models import (
     ControlEventMark,
     TypeOfControlEvent,
     LessonArchive,
-    custom_user_student_groups
 )
 
 
@@ -215,5 +214,5 @@ class CreateStudentElectiveSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ("id", "student_groups")
 
-    def create(self, validated_data):
-        group = CustomUser.groups.
+    # def create(self, validated_data):
+    #     group = CustomUser.groups.

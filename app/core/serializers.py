@@ -58,34 +58,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "student_groups",
             "email",
         )
-        # fields = ('username','password',
-        #           'email')
 
 
-# class ControlWorkSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ControlWork
-#         fields = ('id', 'name')
-
-# class TestSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Test
-#         fields = ('id', 'name')
-
-
-# class AdditionalMaterialsSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = AdditionalMaterials
-#         fields = ('id', 'name', 'content')
-# class TypeOfControlEventSerializer(serializers.ModelSerializer):
-#      class Meta:
-#         model = ControlEvent
-#         fields = ('id','name')
-# class ControlEventSerializer(serializers.ModelSerializer):
-#     type = TypeOfControlEventSerializer()
-#     class Meta:
-#         model = ControlEvent
-#         fields = ('id','name','type')
 class SubjectSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     additional_materials = serializers.StringRelatedField(many=True)
@@ -209,11 +183,31 @@ class UpdateMarksSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-# class CreateStudentElectiveSerializer(serializers.Serializer):
-#     id_u = serializers.IntegerField()
-#     id_g = serializers.IntegerField()
+class CreateStudentElectiveSerializer(serializers.Serializer):
+    userId = serializers.IntegerField()
+    groupId = serializers.IntegerField()
     
+    def create(self, validated_data):
+        userId = validated_data["userId"]
+        groupId = validated_data["groupId"]
+        student = CustomUser.objects.get(id=userId)
+        group = StudentGroup.objects.get(id=groupId)
+        query = student.student_groups.add(group)
+        return query
 
-#     def create(self, validated_data):
-#         return el
+class DeleteStudentElectiveSerializer(serializers.Serializer):
+    userId = serializers.IntegerField()
+    groupId = serializers.IntegerField()
+    
+    def delete(self, validated_data):
+        userId = validated_data["userId"]
+        groupId = validated_data["groupId"]
+        student = CustomUser.objects.get(id=userId)
+        group = StudentGroup.objects.get(id=groupId)
+        query = student.student_groups.remove(group)
+        return query
+
+        
+        
+    
         

@@ -29,6 +29,7 @@ from .serializers import (
     ControlEventSerializer,
     UpdateMarksSerializer,
     CreateStudentElectiveSerializer,
+    DeleteStudentElectiveSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -272,8 +273,18 @@ class CreateStudentElectiveAPIView(APIView):
     def post(self, request):
         serializer = CreateStudentElectiveSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            group = serializer.create(request.data)
             return Response(f"{request.data}", status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                 {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
+            )
+            
+    def delete(self, request):
+        serializer = DeleteStudentElectiveSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            group = serializer.delete(request.data)
+            return Response(f"{request.data}", status=status.HTTP_202_ACCEPTED)
         else:
             return Response(
                  {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST

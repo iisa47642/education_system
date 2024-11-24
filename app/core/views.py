@@ -272,9 +272,9 @@ class CreateStudentElectiveAPIView(APIView):
     def post(self, request):
         serializer = CreateStudentElectiveSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            mark = serializer.save()
+            serializer.save()
             return Response(f"{request.data}", status=status.HTTP_201_CREATED)
         else:
             return Response(
-                {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
+                 {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
             )

@@ -209,10 +209,11 @@ class UpdateMarksSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class CreateStudentElectiveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ("id", "student_groups")
+# class CreateStudentElectiveSerializer(serializers.Serializer):
+#     id_u = serializers.IntegerField()
+#     id_g = serializers.IntegerField()
+    
 
-    # def create(self, validated_data):
-    #     group = CustomUser.groups.
+#     def create(self, validated_data):
+#         return el
+        

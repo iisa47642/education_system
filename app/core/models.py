@@ -21,7 +21,10 @@ class CustomUser(AbstractUser):
     additional_info = models.TextField(null=True)
     gpa = models.FloatField(null=True, blank=True)
     perc = models.FloatField(null=True, blank=True)
-    student_groups = models.ManyToManyField(to=StudentGroup)
+    student_groups = models.ManyToManyField(to=StudentGroup, through='CustomGroups')
+
+# class CustomGroups(models.Model):
+    
     
     
     class Meta:

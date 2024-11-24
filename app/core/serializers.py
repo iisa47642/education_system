@@ -1,35 +1,64 @@
 from rest_framework import serializers
-from core.models import (CustomUser, Lesson, LessonLocation,
-                        Subject, TypeOfLesson, StudentGroup,AdditionalMaterials,
-                        ControlEvent,ControlEventMark,TypeOfControlEvent,LessonArchive)
+from core.models import (
+    CustomUser,
+    Lesson,
+    LessonLocation,
+    Subject,
+    TypeOfLesson,
+    StudentGroup,
+    AdditionalMaterials,
+    ControlEvent,
+    ControlEventMark,
+    TypeOfControlEvent,
+    LessonArchive,
+    custom_user_student_groups
+)
 
 
 class LessonLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonLocation
-        fields = ('id', 'name')
+        fields = ("id", "name")
+
+
 class CustomUserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('username','password','email')
-        
+        fields = ("username", "password", "email")
+
     def create(self, validated_data):
         user = CustomUser.objects.create_user(
-            validated_data['username'],
-            validated_data['email'],
-            validated_data['password']
+            validated_data["username"],
+            validated_data["email"],
+            validated_data["password"],
         )
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data["password"])
         return user
+
+
 class CustomUserSerializer(serializers.ModelSerializer):
 
     student_groups = serializers.StringRelatedField(many=True)
     groups = serializers.StringRelatedField(many=True)
     groups = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = CustomUser
-        fields = ('id','username','password','birth_date','surname',
-                  'profile','gpa','course','perc','additional_info','groups','student_groups','email')
+        fields = (
+            "id",
+            "username",
+            "password",
+            "birth_date",
+            "surname",
+            "profile",
+            "gpa",
+            "course",
+            "perc",
+            "additional_info",
+            "groups",
+            "student_groups",
+            "email",
+        )
         # fields = ('username','password',
         #           'email')
 
@@ -38,11 +67,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = ControlWork
 #         fields = ('id', 'name')
-        
+
 # class TestSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Test
 #         fields = ('id', 'name')
+
 
 # class AdditionalMaterialsSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -60,79 +90,130 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class SubjectSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     additional_materials = serializers.StringRelatedField(many=True)
+
     # control_event = serializers.StringRelatedField(many=True)
     class Meta:
         model = Subject
-        fields = ('id','name','groups',
-                  'additional_materials','is_elective')
-        
-        
+        fields = ("id", "name", "groups", "additional_materials", "is_elective")
+
+
 class TypeOfLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = TypeOfLesson
-        fields = ('id', 'name')
-        
+        fields = ("id", "name")
+
+
 class StudentGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentGroup
-        fields = ('id', 'name')
-        
+        fields = ("id", "name")
+
+
 class LessonSerializer(serializers.ModelSerializer):
     groupId = serializers.StringRelatedField(many=True)
     teacherId = CustomUserSerializer()
     subjectId = SubjectSerializer()
     location = LessonLocationSerializer()
     type = TypeOfLessonSerializer()
+
     class Meta:
         model = Lesson
-        fields = ['subjectId','groupId','teacherId',
-                  'lesson_number','week_number','week_day_number','startTime','endTime','type',
-                  'location','date']
-        
+        fields = [
+            "subjectId",
+            "groupId",
+            "teacherId",
+            "lesson_number",
+            "week_number",
+            "week_day_number",
+            "startTime",
+            "endTime",
+            "type",
+            "location",
+            "date",
+        ]
+
+
 class LessonArchiveSerializer(serializers.ModelSerializer):
     lessonId = LessonSerializer()
     userId = CustomUserSerializer()
+
     class Meta:
         model = LessonArchive
-        fields = ('id', 'lessonId','userId','attendance')
+        fields = ("id", "lessonId", "userId", "attendance")
+
 
 # class LessonSubSerializer(serializers.ModelSerializer):
-    
+
 
 class TypeOfControlEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = TypeOfControlEvent
-        fields = ('id', 'name')
-    
+        fields = ("id", "name")
+
+
 class ControlEventSerializer(serializers.ModelSerializer):
     type = TypeOfControlEventSerializer()
+
     class Meta:
         model = ControlEvent
-        fields = ('id', 'name','type')
-    
+        fields = ("id", "name", "type")
+
+
 class ControlEventMarkSerializer(serializers.ModelSerializer):
     controlWorkId = ControlEventSerializer()
+
     # userId = CustomUserSerializer()
     class Meta:
-        model = ControlEventMark 
-        fields = ('id','controlWorkId','mark')
-        
+        model = ControlEventMark
+        fields = ("id", "controlWorkId", "mark")
+
+
 class CustomUserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id',)
+        fields = ("id",)
+
+
 class ControlEventCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ControlEvent
-        fields = ('id',)
-    
+        fields = ("id",)
+
+
 class CreateMarksSerializer(serializers.ModelSerializer):
     userId = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
-    controlWorkId = serializers.PrimaryKeyRelatedField(queryset=ControlEvent.objects.all())
+    controlWorkId = serializers.PrimaryKeyRelatedField(
+        queryset=ControlEvent.objects.all()
+    )
+
     class Meta:
         model = ControlEventMark
-        fields = ('controlWorkId','userId','mark')
-        
+        fields = ("controlWorkId", "userId", "mark")
+
     def create(self, validated_data):
         mark = ControlEventMark.objects.create(**validated_data)
         return mark
+
+
+class UpdateMarksSerializer(serializers.ModelSerializer):
+    userId = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
+    controlWorkId = serializers.PrimaryKeyRelatedField(
+        queryset=ControlEvent.objects.all()
+    )
+
+    class Meta:
+        model = ControlEventMark
+        fields = ("id", "controlWorkId", "userId", "mark")
+
+    def update(self, instance, validated_data):
+        instance.mark = validated_data.get("mark", instance.mark)
+        instance.save()
+        return instance
+
+class CreateStudentElectiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ("id", "student_groups")
+
+    def create(self, validated_data):
+        group = CustomUser.groups.

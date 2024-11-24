@@ -28,7 +28,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     class Meta:
         model = CustomUser
-        fields = ('username','password','birth_date','surname',
+        fields = ('id','username','password','birth_date','surname',
                   'profile','gpa','course','perc','additional_info','groups','student_groups','email')
         # fields = ('username','password',
         #           'email')

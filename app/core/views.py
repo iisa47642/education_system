@@ -8,7 +8,7 @@ from core.models import (CustomUser, Lesson, LessonLocation,
                         Subject, TypeOfLesson, StudentGroup,LessonArchive, ControlEventMark, ControlEvent)
 from .serializers import (SubjectSerializer,CustomUserSerializer,LessonSerializer,ControlEventMarkSerializer,
                           LessonLocationSerializer,TypeOfLessonSerializer,StudentGroupSerializer,
-                          LessonArchiveSerializer,CustomUserRegistrationSerializer, CreateMarksSerializer)
+                          LessonArchiveSerializer,CustomUserRegistrationSerializer, CreateMarksSerializer,ControlEventSerializer)
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.permissions import IsAuthenticated,AllowAny
 # from core.permissions import Id
@@ -139,7 +139,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
             
 
 class AttendanceSubViewSet(viewsets.ModelViewSet):
-    #готово
+    #не готово
     # permission_classes = [IsAuthenticated]
     serializer_class = LessonArchiveSerializer
     def get_queryset(self):
@@ -179,5 +179,13 @@ class StudentsInGroupViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         name = self.request.query_params.get('name')
         groupId = StudentGroup.objects.get(name=name).id
-        queryset = CustomUser.objects.filter(student_groups=groupId)
+        queryset = CustomUser.objects.filter(student_groups=groupId,groups__name__icontains='student')
+        return queryset
+    
+class ControlEventViewSet(viewsets.ModelViewSet):
+    # permission_classes = [IsAuthenticated]
+    serializer_class = ControlEventSerializer
+    def get_queryset(self):
+        ids = self.request.query_params.get('ids')
+        queryset = ControlEvent.objects.filter(subjectId=ids)
         return queryset

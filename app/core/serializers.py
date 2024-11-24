@@ -96,6 +96,9 @@ class LessonArchiveSerializer(serializers.ModelSerializer):
         model = LessonArchive
         fields = ('id', 'lessonId','userId','attendance')
 
+# class LessonSubSerializer(serializers.ModelSerializer):
+    
+
 class TypeOfControlEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = TypeOfControlEvent
@@ -113,16 +116,23 @@ class ControlEventMarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = ControlEventMark 
         fields = ('id','controlWorkId','mark')
+        
+class CustomUserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id',)
+class ControlEventCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ControlEvent
+        fields = ('id',)
     
 class CreateMarksSerializer(serializers.ModelSerializer):
+    userId = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
+    controlWorkId = serializers.PrimaryKeyRelatedField(queryset=ControlEvent.objects.all())
     class Meta:
         model = ControlEventMark
         fields = ('controlWorkId','userId','mark')
         
     def create(self, validated_data):
-        mark = CustomUser.objects.create(
-            validated_data['controlWorkId'],
-            validated_data['userId'],
-            validated_data['mark']
-        )
+        mark = ControlEventMark.objects.create(**validated_data)
         return mark

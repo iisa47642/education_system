@@ -87,7 +87,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 class ProfileViewSet(viewsets.ModelViewSet):
     # готово
-    ermission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = CustomUserSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
@@ -130,11 +130,22 @@ class CoursesViewSet(viewsets.ModelViewSet):
     
 class AttendanceViewSet(viewsets.ModelViewSet):
     #готово
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     serializer_class = LessonArchiveSerializer
     def get_queryset(self):
         id_u = self.request.query_params.get('id')
-        queryset = LessonArchive.objects.filter(id=id_u)
+        queryset = LessonArchive.objects.filter(userId=id_u)
+        return queryset
+            
+
+class AttendanceSubViewSet(viewsets.ModelViewSet):
+    #готово
+    # permission_classes = [IsAuthenticated]
+    serializer_class = LessonArchiveSerializer
+    def get_queryset(self):
+        id_u = self.request.query_params.get('id')
+        ids = self.request.query_params.get('ids')
+        queryset = LessonArchive.objects.filter(userId=id_u)
         return queryset
 
 class ControlEventMarkViewSet(viewsets.ModelViewSet):
@@ -147,8 +158,26 @@ class ControlEventMarkViewSet(viewsets.ModelViewSet):
         return queryset
 
 class CreateMarksAPIView(APIView):
+    # готово, но нужно обсудить с севой
     def post(self, request):
-        serializer = CreateMarksSerializer(data=request.data)
-        if serializer.is_valid():
+        serializer = CreateMarksSerializer(data=request.data['marks'],many=True)
+        # c фронтенда нужен словарь из ключа 'marks' со значение списка словарей параметров для оценок
+        # {"marks" : [{'controlWorkId': '1', 'userId': '3', 'mark': '34'},{{'controlWorkId': '1', 'userId': '3', 'mark': '34'}}...]}
+        if serializer.is_valid(raise_exception=True):
             mark = serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(f'{request.data}',status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error': 'Введены не все данные'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class StudentsInGroupViewSet(viewsets.ModelViewSet):
+    #готово
+    # permission_classes = [IsAuthenticated]
+    serializer_class = CustomUserSerializer
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        groupId = StudentGroup.objects.get(name=name).id
+        queryset = CustomUser.objects.filter(student_groups=groupId)
+        return queryset

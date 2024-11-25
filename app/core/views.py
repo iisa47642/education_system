@@ -306,7 +306,7 @@ class CreateAttendanceAPIView(APIView):
     
     def put(self, request):
         last_att = LessonArchive.objects.get(
-            userId=request.data["userId"], lessonId=request.data["lesId"]
+            userId=request.data["userId"], lessonId=request.data["lessonId"]
         )
         serializer = UpdateAttendanceSerializer(data=request.data, instance=last_att)
         if serializer.is_valid(raise_exception=True):

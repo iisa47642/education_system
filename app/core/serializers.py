@@ -230,6 +230,10 @@ class CreateAttendanceSerializer(serializers.Serializer):
         return query    
         
 class UpdateAttendanceSerializer(serializers.Serializer):
+    userId = serializers.IntegerField()
+    attendance = serializers.BooleanField()
+    lessonId = serializers.IntegerField()
+        
     def update(self, instance, validated_data):
         instance.attendance = validated_data.get("attendance", instance.attendance)
         instance.save()

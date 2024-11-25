@@ -10,7 +10,8 @@ from .views import (
     ControlEventMarkViewSet,
     StudentsInGroupViewSet,
     ControlEventViewSet,
-    TgbotScheduleView
+    TgbotScheduleViewSet,
+    DateLessonsViewSet
 )
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -27,7 +28,8 @@ router.register(r"attendancesub", AttendanceSubViewSet, "attendancesub")
 router.register(r"marks", ControlEventMarkViewSet, "marks")
 router.register(r"students", StudentsInGroupViewSet, "student")
 router.register(r"controlevent", ControlEventViewSet, "controlevent")
-router.register(r"tgschedule", TgbotScheduleView, "tgschedule")
+router.register(r"tgschedule", TgbotScheduleViewSet, "tgschedule")
+router.register(r"datelessons", DateLessonsViewSet, "datelessons")
 
 
 # URLs настраиваются автоматически роутером

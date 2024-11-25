@@ -91,7 +91,8 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ['id',
+        fields = [
+            'id',
             "subjectId",
             "groupId",
             "teacherId",
@@ -101,7 +102,7 @@ class LessonSerializer(serializers.ModelSerializer):
             "startTime",
             "endTime",
       
-      "type",
+            "type",
             "location",
             "date",
         ]

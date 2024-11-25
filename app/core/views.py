@@ -349,11 +349,23 @@ class StudentElectiveAPIView(APIView):
             # )
 
 
-class TgbotScheduleView(viewsets.ModelViewSet):
+
+class DateLessonsViewSet(viewsets.ModelViewSet):
+    # готово
+    # permission_classes = [IsAuthenticated]
     serializer_class = LessonSerializer
 
     def get_queryset(self):
         group_name = self.request.query_params.get("name")
+        ids = self.request.query_params.get("ids")
         groupId = StudentGroup.objects.get(name=group_name)
+        queryset = Lesson.objects.filter(groupId=groupId,subjectId=ids)
+        return queryset
+
+class TgbotScheduleViewSet(viewsets.ModelViewSet):
+    serializer_class = LessonSerializer
+    def get_queryset(self):
+        name = self.request.query_params.get("name")
+        groupId = StudentGroup.objects.get(name=name)
         queryset = Lesson.objects.filter(groupId=groupId)
         return queryset

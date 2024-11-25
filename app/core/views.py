@@ -289,7 +289,7 @@ class CreateStudentElectiveAPIView(APIView):
             
     def delete(self, request):
         name = request.data["name"]
-        groupId = StudentGroup.objects.get(name=name)
+        groupId = StudentGroup.objects.get(name=name).id
         request.data["groupId"]=groupId
         serializer = DeleteStudentElectiveSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):

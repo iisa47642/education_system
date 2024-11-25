@@ -38,7 +38,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # from core.permissions import Id
 from rest_framework import permissions
-
+from rest_framework.renderers import JSONRenderer
+from django.http import JsonResponse
 
 class Id(permissions.BasePermission):
 
@@ -328,9 +329,11 @@ class StudentElectiveAPIView(APIView):
             queryset2 = Subject.objects.filter(is_elective=True)
             serializer1 = SubjectSerializer(queryset1,many=True)
             serializer2 = SubjectSerializer(queryset2,many=True)
-            
+            dict1 = {'student_group': serializer1.data[0]}
+            dict2 = {'all_group': serializer2.data[0]}
+            merged_dictionary = {**dict1, **dict2}
             # if serializer1.is_valid(raise_exception=True) and serializer2.is_valid(raise_exception=True):
-            return Response(f"all_elective: {serializer2.data} student_elective: {serializer1.data}", status=status.HTTP_200_OK)
+            return JsonResponse(merged_dictionary)
             # else:
             #     return Response(
             #      {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST

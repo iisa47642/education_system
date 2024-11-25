@@ -238,3 +238,4 @@ class UpdateAttendanceSerializer(serializers.Serializer):
         instance.attendance = validated_data.get("attendance", instance.attendance)
         instance.save()
         return instance
+

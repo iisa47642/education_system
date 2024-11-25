@@ -197,7 +197,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
 
 
 class AttendanceSubViewSet(viewsets.ModelViewSet):
-    # не готово
+    # готово
     # permission_classes = [IsAuthenticated]
     serializer_class = LessonArchiveSerializer
 
@@ -317,14 +317,21 @@ class CreateAttendanceAPIView(APIView):
                 {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-class StudentElectiveViewSet(viewsets.ModelViewSet):
-    serializer_class = SubjectSerializer
-
-    def get_queryset(self):
-        id_u = self.request.query_params.get("id")
-        groupsId = Subject.objects.filter(is_elective=True).values_list("groups",flat=True)
-        us_groups = [i for i in CustomUser.objects.get(id=id_u).student_groups.values_list('id',flat=True)]
-        groups = list(set(groupsId) & set(us_groups))
-        queryset = Subject.objects.filter(groups__in=groups)
-        return queryset
+class StudentElectiveAPIView(APIView):
+    
+    def get(self, request, *args, **kwargs):
+            id_u = kwargs.get("id", None)
+            electivegroupsId = Subject.objects.filter(is_elective=True).values_list("groups",flat=True)
+            us_groups = [i for i in CustomUser.objects.get(id=id_u).student_groups.values_list('id',flat=True)]
+            groups = list(set(electivegroupsId) & set(us_groups))
+            queryset1 = Subject.objects.filter(groups__in=groups)
+            queryset2 = Subject.objects.filter(is_elective=True)
+            serializer1 = SubjectSerializer(queryset1,many=True)
+            serializer2 = SubjectSerializer(queryset2,many=True)
             
+            # if serializer1.is_valid(raise_exception=True) and serializer2.is_valid(raise_exception=True):
+            return Response(f"all_elective: {serializer2.data} student_elective: {serializer1.data}", status=status.HTTP_200_OK)
+            # else:
+            #     return Response(
+            #      {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
+            # )

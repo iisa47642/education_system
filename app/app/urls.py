@@ -21,7 +21,8 @@ from core.views import (
     RegistrationAPIView,LoginAPIView,LogoutAPIView,
     CreateMarksAPIView,
     CreateStudentElectiveAPIView,
-    CreateAttendanceAPIView)
+    CreateAttendanceAPIView,
+    StudentElectiveAPIView)
 import sys
 from django.conf import settings
 from app.settings import DEBUG, MEDIA_URL
@@ -38,6 +39,7 @@ urlpatterns = [
     path('api/v1/createmark',CreateMarksAPIView.as_view(), name='createmark'),
     path('api/v1/createelective',CreateStudentElectiveAPIView.as_view(), name='createelective'),
     path('api/v1/createattendance',CreateAttendanceAPIView.as_view(), name='createattendance'),
+    path('api/v1/studentelective/<int:id>/',StudentElectiveAPIView.as_view(), name='studentelective'),
     
 ]
 

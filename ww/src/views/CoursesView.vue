@@ -35,12 +35,17 @@
         },
         methods: {
             async loadData(id) {
-                let response = await axios.get("/courses", { params: {
-                    id: id
-                }
+                let response = await axios.get("/courses", {
+                    params: {id: id},
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
                 });
                 this.courses2 = response.data;
                 console.log(response.data);
+            },
+            goCourse(cid) {
+                this.$router.push({name: "course", params: {id: this.userId, cid: cid}})
             }
         },
         mounted() {
@@ -57,7 +62,7 @@
                 </div>
             <div class="courses__row">
                 <div v-for="item,index in courses2" class="courses__item course">
-                        <div class="course__body">
+                        <div @click="goCourse(item.id)" class="course__body">
                             <div class="course__img">
                 
                             <img src="../assets/imgs/image.png" alt="">
@@ -169,5 +174,56 @@
         position: absolute;
         left: 0;
         top: 0;
+    }
+
+    @media (max-width: 1200px) {
+        .courses__item {
+            padding: 40px;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .courses__row {
+            display: block;
+        }
+
+        .course {
+            flex: 1 1 auto;
+        }
+
+        .course__img {
+            padding-bottom: 40%;
+        }
+
+        .title__padding {
+            padding: 0 40px;
+        }
+        .courses__title {
+            font-size: 40px;
+        }
+    }
+    @media (max-width: 600px) {
+        .courses__item {
+            padding: 20px 40px;
+        }
+        .courses__title {
+            font-size: 30px;
+        }
+        .container {
+            width: 100%;
+            padding: 0 10px;
+        }
+        .courses {
+            border: 0;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .courses__item {
+            padding: 20px 0;
+        }
+        .course__img {
+            padding-bottom: 50%;
+        }
     }
 </style>

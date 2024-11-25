@@ -5,6 +5,7 @@
             return {
                 password: "",
                 username: "",
+                email: "",
                 error: false
             }
         },
@@ -18,21 +19,23 @@
                 return JSON.parse(jsonPayload);
             },
             // типо подгрузка данных
-            async loadData(username, password) {
-                if (!username || !password) {
+            async loadData(username, password, email) {
+                if (!username || !password || !email) {
                     this.error = true;
                 } else {
                     this.error = false;
-                    let response = axios.post("/login", {
+                    let response = axios.post("/registration", {
                         username: username,
-                        password: password
+                        password: password,
+                        email: email
                     });
                     response.then((result) => {
-                        console.log(result);
-                        if (result.status == 200) {
+                        console.log(result.status);
+                        if (String(result.status)[0] == "2") {
                             localStorage.setItem('accessToken', result.data.access);
                             localStorage.setItem('refreshToken', result.data.refresh);
                             let data = this.parseJwt(result.data.access);
+                            console.log(data);
                             this.$router.push({name: "profile", params: {id: data.user_id}});
                         }
                         
@@ -47,18 +50,21 @@
         <div class="circle">
             <div class="register-form-container">
                 <h1 class="form-title">
-                    ВВЕДИТЕ ДАННЫЕ
+                    регистрация
                 </h1>
                 <div class="form-fields">
                     <div class="form-field">
                         <h3 class="log">ЛОГИН: </h3><input v-model="username" name="username" class="vvod" type="text">
                     </div>
                     <div class="form-field">
-                        <h3 class="password">ПАРОЛЬ: </h3><input v-model="password" class="vvod1" type="password">
+                        <h3 class="password">ПАРОЛЬ: </h3><input v-model="password" class="vvod" type="password">
+                    </div>
+                    <div class="form-field">
+                        <h3 class="password">ПОЧТА: </h3><input v-model="email" class="vvod1" type="text">
                     </div>
                 </div>
                 <div class="form-buttons">
-                    <button @click="loadData(this.username,this.password)" class="button"><h3 class="enter">ВОЙТИ</h3></button>
+                    <button @click="loadData(this.username,this.password, this.email)" class="button"><h3 class="enter">РЕГИСТРАЦИЯ</h3></button>
                     <div v-if="this.error" class="error">ошибка: данные неверные</div>
                     <div class="divider"><a href= "/recover" class="recover">восстановить доступ</a></div>
                 </div>
@@ -76,8 +82,8 @@ main {
     justify-content: center;
 }
 .circle {
-    height: 400px;
-    max-width: 840px;
+    max-width: 800px;
+    width: 70%;
     top: 100px;
     text-align: center;
     box-shadow: 0px 4px 4px 0px #00000040;
@@ -108,18 +114,20 @@ main {
     color: #323843;
     font-weight: 700;
     align-items: center;
+    padding-right: 10px;
+    flex: 0 1 180px;
  
 }
 .form-field input{
     border: 2px solid #323843;
-    flex: 0 1 70%;
+    flex: 1 1 auto;
     line-height: 34px;
     font-size: 24px;
     background: #C6D0E0;
     padding-left: 10px;
 }
 
-.form-field:first-child {
+.form-field:not(:last-child) {
     margin-bottom: 30px;
 }
 

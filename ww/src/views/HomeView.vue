@@ -57,6 +57,7 @@
         padding: 7px 14px;
         transition-duration: 200ms;
         margin-bottom: 30px;
+        cursor: pointer;
     }
     main a:hover {
         background: #323843;
@@ -97,7 +98,7 @@
         border: 2px solid #000;
         border-radius: 60px;
         position: relative;
-        padding-bottom: 20%;
+        padding-bottom: 25%;
         overflow: hidden;
         margin-bottom: 40px;
     }
@@ -115,5 +116,36 @@
     }
     .about p.last {
         margin-bottom: 40px;
+    }
+
+    @media (max-width: 800px) {
+        main .container {
+            padding: 100px 20px;
+        }
+        .main__title {
+            font-size: 80px;
+        }
+
+        .img__about {
+            padding-bottom: 30%;
+        }
+
+    }
+
+    @media (max-width: 600px) {
+        .main__title {
+            font-size: 60px;
+        }
+        main .container {
+            padding: 50px 10px;
+        }
+
+        .img__about {
+            padding-bottom: 40%;
+        }
+
+        main p {
+            font-size: 20px;
+        }
     }
 </style>

@@ -1,6 +1,6 @@
 <script>
-    import HeaderBlock from "./components/HeaderBlock.vue"
-    import FooterBlock from "./components/FooterBlock.vue"
+    import HeaderBlock from "./components/HeaderBlock.vue";
+    import FooterBlock from "./components/FooterBlock.vue";
     import {RouterView} from "vue-router";
 
     export default {

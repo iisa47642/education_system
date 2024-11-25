@@ -4,7 +4,10 @@ import InfoView from "../views/InfoView.vue"
 import ProfileView from "../views/ProfileView.vue"
 import LoginView from "../views/LoginView.vue"
 import CoursesView from "../views/CoursesView.vue"
-import SheduleView from "../views/SheduleView.vue"
+import ScheduleView from "../views/ScheduleView.vue"
+import CourseView from "../views/CourseView.vue"
+import RegistrationView from '../views/RegistrationView.vue'
+import RatingView from "../views/RatingView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,9 +43,24 @@ const router = createRouter({
       component: CoursesView
     },
     {
-      path: '/profile/:id/shedule',
-      name: 'shedule',
-      component: SheduleView
+      path: '/profile/:id/schedule',
+      name: 'schedule',
+      component: ScheduleView
+    },
+    {
+      path: '/profile/:id/courses/:cid',
+      name: 'course',
+      component: CourseView
+    },
+    {
+      path: '/registration',
+      name: 'registration',
+      component: RegistrationView
+    },
+    {
+      path: '/rating',
+      name: 'rating',
+      component: RatingView
     }
   ]
 })

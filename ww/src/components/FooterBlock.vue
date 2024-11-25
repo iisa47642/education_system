@@ -59,4 +59,37 @@ footer a {
 .footer__menu .first {
     margin-bottom: 8px;
 }
+
+@media (max-width: 800px) {
+    footer {
+        font-size: 16px;
+    }
+    h2 {
+        font-size: 16px;
+    }
+    .footer__row {
+        justify-content: space-between;
+    }
+    .footer__menu {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 550px) {
+    h2 {
+        margin-bottom: 10px;
+    }
+    .footer__row {
+        display: block;
+        text-align: center;
+    }
+
+    .footer__menu {
+        margin-bottom: 10px;
+    }
+    .copy {
+        display: inline-block;
+        margin: 0;
+    }
+}
 </style>

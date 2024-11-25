@@ -12,6 +12,7 @@
                 userId: this.$route.params.id,
                 weekNumber: 1,
                 isStudent: false,
+                attendance: [],
                 s: [],
                 schedule: [
                     {
@@ -54,10 +55,33 @@
             }
         },
         methods: {
+            selectDay(dayId, linkId) {
+                let days = document.querySelectorAll(".day");
+                let day = document.getElementById(dayId);
+                let link = document.getElementById(linkId);
+                let links = document.querySelectorAll(".schedule__row a");
+                console.log(days);
+                console.log(day);
+                console.log(links);
+                console.log(link);
+                for (let i = 0; i < 6; i++) {
+                    days[i].classList.remove("visible");
+                    links[i].classList.remove("active");
+                }
+                link.classList.add("active");
+                day.classList.add("visible");
+            },
+            goEditSchedule() {
+                this.$router.push({name: "scheduleEdit", params: {
+                    id: this.userId
+                }});
+            },
             getDate(date) {
                 console.log(date);
             },
-            createShedule(s) {
+            createShedule(s,a) {
+                console.log("s",s);
+                console.log("a",a);
                 for (let i = 0; i < this.schedule.length; i++) {
                     if (this.schedule[i].day == this.weekday) {
                         this.schedule[i].today = true;
@@ -65,21 +89,40 @@
                     }
                 }
                 for (let i = 0; i < s.length; i++) {
-                    if (s[i].lessonId.week_number == this.weekNumber) {
-                        this.schedule[s[i].lessonId.week_day_number-1].subjects.push(
-                            {
-                                name: s[i].lessonId.subjectId.name,
-                                startTime: dayjs(s[i].lessonId.startTime).format("HH:mm"),
-                                endTime: dayjs(s[i].lessonId.endTime).format("HH:mm"),
-                                location: s[i].lessonId.location.name,
-                                order: s[i].lessonId.lesson_number,
-                                attendance: s[i].attendance,
-                                isElective: s[i].lessonId.subjectId.is_elective,
+                    if (s[i].week_number == this.weekNumber) {
+                        let flag = true;
+                        for (let j = 0; j < a.length; j++) {
+                            if (s[i].id == a[j].id) {
+                                this.schedule[s[i].week_day_number-1].subjects.push(
+                                    {
+                                        name: s[i].subjectId.name,
+                                        startTime: dayjs(s[i].startTime).format("HH:mm"),
+                                        endTime: dayjs(s[i].endTime).format("HH:mm"),
+                                        location: s[i].location.name,
+                                        order: s[i].lesson_number,
+                                        attendance: a[j].attendance,
+                                        isElective: s[i].subjectId.is_elective,
+                                        isAttendance: true
+                                    }
+                                );
+                                flag = false;
+                                break;
                             }
-                        )
-                    } else {
-                        console.log(this.weekNumber);
-                        console.log(s[i].lessonId.week_number);
+                        }
+                        if (flag) {
+                            this.schedule[s[i].week_day_number-1].subjects.push(
+                                    {
+                                        name: s[i].subjectId.name,
+                                        startTime: dayjs(s[i].startTime).format("HH:mm"),
+                                        endTime: dayjs(s[i].endTime).format("HH:mm"),
+                                        location: s[i].location.name,
+                                        order: s[i].lesson_number,
+                                        attendance: false,
+                                        isElective: s[i].subjectId.is_elective,
+                                        isAttendance: false
+                                    }
+                                );
+                        }
                     }
                 }
                 for (let i = 0; i < 6; i++) {
@@ -97,19 +140,37 @@
                         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                     },
                 });
-                this.createShedule(response.data);
+                let attendance = response.data;
+                response = await axios.get("/schedule", {
+                    params: {
+                        id: id,
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                });
+                let s = response.data;
+                this.createShedule(s,attendance);
+                response = await axios.get("/profile", {
+                    params: {
+                        id: id,
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                });
                 console.log(response.data);
-                if (response.data[0].userId.groups[0] == "student") {
+                if (response.data[0].groups[0] == "student") {
                     this.isStudent = true;
                 } else {
                     this.isStudent = false;
                 }
+                
             }
         },
         mounted() {
             this.getDate(this.date);
             this.loadData(this.userId);
-    
         }
     }
 </script>
@@ -123,39 +184,51 @@
                 <div class="shedule__subtitle">
                     <h3>идёт {{this.weekNumber}} учебная неделя (нечёт.) {{this.date}}</h3>
                 </div>
+                <ul class="schedule__row">
+                    <li><a id="MondayA" @click="selectDay('Monday', 'MondayA')" class="active">mon</a></li>
+                    <li><a id="TuesdayA" @click="selectDay('Tuesday', 'TuesdayA')">tue</a></li>
+                    <li><a id="WednesdayA" @click="selectDay('Wednesday', 'WednesdayA')">wed</a></li>
+                    <li><a id="ThursdayA" @click="selectDay('Thurday', 'ThursdayA')">thu</a></li>
+                    <li><a id="FridayA" @click="selectDay('Friday', 'FridayA')">fri</a></li>
+                    <li><a id="SaturdayA" @click="selectDay('Saturday', 'SaturdayA')">sat</a></li>
+                </ul>
                 <div class="shedule__col">
-                    <div v-for="item, index in schedule" class="day">
-                        <h3 :class="{today: item.today}">{{item.name}}</h3>
-                        <div class="day__block">
-                            <div class="day__row">
-                                <div class="day__left">
-                                    <div class="left__item">
-                                        <div v-for="subject, ind in item.subjects"  class="subject non-elective">
-                                            <h4 class="subject__title">
-                                                {{ subject.name }}
-                                            </h4>
-                                            <div class="subject__time">
-                                                {{ subject.startTime }}-{{ subject.endTime }}
-                                            </div>
-                                            <div class="subject__class">
-                                                {{subject.location}}
-                                            </div>
-                                            <div v-if="isStudent" :class="{subject__visited: true, visited: subject.attendance}">
+                    <div v-for="item, index in schedule">
+                        <div :id="item.name" :class="{day: true, visible: item.today }">
+                            <h3 :class="{today: item.today}">{{item.name}}</h3>
+                            <div class="day__block">
+                                <div class="day__row">
+                                    <div class="day__left">
+                                        <div v-for="subject, ind in item.subjects" class="left__item">
+                                            <div v-if="!subject.isElective" class="subject non-elective">
+                                                <h4 class="subject__title">
+                                                    {{ subject.name }}
+                                                </h4>
+                                                <div class="subject__time">
+                                                    {{ subject.startTime }}-{{ subject.endTime }}
+                                                </div>
+                                                <div class="subject__class">
+                                                    {{subject.location}}
+                                                </div>
+                                                <div v-if="isStudent" :class="{subject__visited: true, visited: subject.attendance}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="day__right">
-                                    <div class="right__item">
-                                        <div class="subject elective">
-                                            <div class="subject__title">
-                                                
-                                            </div>
-                                            <div class="subject__time">
-                                                
-                                            </div>
-                                            <div class="subject__class">
-                                                
+                                    <div class="day__right">
+                                        <div v-for="subject, ind in item.subjects" class="right__item">
+                                            <div v-if="subject.isElective" class="subject elective">
+                                                <h4 class="subject__title">
+                                                    {{ subject.name }}
+                                                </h4>
+                                                <div class="subject__time">
+                                                    {{ subject.startTime }}-{{ subject.endTime }}
+                                                </div>
+                                                <div class="subject__class">
+                                                    {{subject.location}}
+                                                </div>
+                                                <div v-if="isStudent" :class="{subject__visited: true, visited: subject.attendance}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -163,8 +236,9 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
-                <div v-if="isStudent" class="schedule__edit">
+                <div @click="goEditSchedule" v-if="isStudent" class="schedule__edit">
                     <a>изменить расписание</a>
                 </div>
             </div>
@@ -172,6 +246,9 @@
     </main>
 </template>
 <style scoped>
+    .schedule__row {
+        display: none;
+    }
     main {
         background: rgb(115,130,138);
         background: linear-gradient(45deg, rgba(115,130,138,1) 0%, rgba(132,135,139,1) 50%, rgba(155,153,156,1) 100%);
@@ -295,5 +372,98 @@
 
     .schedule__edit a:hover {
         text-decoration: underline;
+    }
+
+    @media(max-width: 1400px) {
+        .day__row {
+            display: block;
+        }
+        .day__left {
+            border: 0;
+        }
+    }
+
+    @media(max-width: 900px) {
+        .shedule__title h2 {
+            font-size: 40px;
+        }
+        .schedule__row {
+            display: flex;
+            margin-bottom: 40px;
+            justify-content: space-around;
+        }
+        .schedule__row a {
+            display: block;
+            color: #fff;
+            font-size: 20px;
+            line-height: 56px;
+            text-align: center;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(0,0,0,50%);
+            border-radius: 30px;
+        }
+        .schedule__row a.active {
+            background: #fff;
+            color: #323843;
+        }
+        .day {
+            display: none;
+        }
+        .day.visible {
+            display: block;
+        }
+        .shedule {
+            border: 0;
+        }
+        .day__row {
+            display: block;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            border-radius: 0;
+        }
+        .subject {
+            display: block;
+            background: rgba(0,0,0,20%);
+            border: 2px solid rgba(0,0,0,50%);
+            border-radius: 20px;
+            padding: 20px;
+            font-size:  24px;
+        }
+        .subject__time {
+            text-align: right;
+            color: #323843;
+        }
+        .subject__visited {
+            display: none;
+        }
+        .container {
+            width: 100%;
+        }
+
+        .shedule {
+            padding: 40px 0;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .schedule__row {
+            justify-content: space-between;
+        }
+
+        .shedule__title {
+            margin-bottom: 20px;
+        }
+        .shedule__title h2 {
+            font-size: 30px;
+        }
+        .schedule__row a {
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            line-height: 46px;
+            border-radius: 25px;
+        }
     }
 </style>

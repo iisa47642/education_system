@@ -9,54 +9,7 @@
                 isStudent: true,
                 subject: {},
                 attendance: [
-                    {
-                        date: "10.10.2024",
-                        attendance: "+"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "н"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "+"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "+"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "н"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "н"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "н"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "+"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "н"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "+"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "н"
-                    },
-                    {
-                        date: "10.10.2024",
-                        attendance: "+"
-                    }
+                    
                 ],
                 tasks: [],
                 marks: [],
@@ -120,8 +73,30 @@
             }
         },
         methods: {
+            goAttendance() {
+                this.$router.push({name: "attendance", params: {id: this.user_id,cid: this.cid}})
+            },
             makeId(student, work,) {
                 return String(student) + " " + String(work);
+            },
+            async makeAttendance() {
+                let response = await axios.get("/attendancesub", {
+                    params: {
+                        id: this.user_id,
+                        ids: this.cid
+                    }
+                });
+                for (let i = 0; i < response.data.length; i++) {
+                    let attendance = "н";
+                    if (response.data[i].attendance) {
+                        attendance = "+";
+                    }
+                    this.attendance.push({
+                        date: response.data[i].lessonId.date,
+                        attendance: attendance,
+                    })
+                }
+                console.log("a", this.attendance);
             },
             async changeMark(studentId, workId, value) {
                 let input = document.getElementById(String(studentId) + " " + String(workId));
@@ -253,6 +228,7 @@
                     },
                 });
                 this.user = response.data;
+                console.log("u",response.data);
                 if (this.user[0].groups[0] == "student") {
                     this.isStudent = true;
                 } else {
@@ -277,8 +253,12 @@
                         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                     },
                 });
-                console.log("students: ",response.data)
-                this.makeStudents(response.data);
+                console.log("students: ",response.data);
+                if (!this.isStudent) {
+                    this.makeStudents(response.data);
+                } else {
+                    this.makeAttendance();
+                }
             }
         },
         mounted() {
@@ -311,7 +291,8 @@
                 <div class="course__nav">
                     <div class="nav__item">
                         <ul>
-                            <li><a href="">посещаемость</a></li>
+                            <li v-if="isStudent"><a href="">посещаемость</a></li>
+                            <li v-if="!isStudent"><a @click="goAttendance">посещаемость</a></li>
                             <li><a href="">оценки</a></li>
                             <li><a href="">посещение</a></li>
                         </ul>
@@ -339,9 +320,12 @@
                     <div class="attendance__title title">
                         <h2>Оценки</h2>
                     </div>
-                    <select @change="getStudents(this.gradesGroup)" v-model="gradesGroup">
-                        <option v-for="item, index in groups" :value="item">{{ item }}</option>
-                    </select>
+                    <div class="teacher__select">
+                        <select @change="getStudents(this.gradesGroup)" v-model="gradesGroup">
+                            <option v-for="item, index in groups" :value="item">{{ item }}</option>
+                        </select>
+                    </div>
+                    
                     <div class="teacher__grades">
                         <div class="teacher__row">
                             <div class="teacher__item up">ФИО</div>
@@ -419,12 +403,47 @@
     </main>
 </template>
 <style scoped>
+    .teacher__select {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+    .teacher__select select {
+        display: inline-block;
+        background: rgba(0,0,0,25%);
+        color: #fff;
+        font-size: 24px;
+        border: 2px solid rgba(0,0,0,50%);
+        border-radius: 5px;
+        padding: 10px 30px;
+    }
+
+    .teacher__select select:focus {
+        outline: none;
+    }
     .teacher__grades {
         background: rgba(0,0,0,25%);
         border: 2px solid rgba(0,0,0,50%);
+        border-bottom: 0;
+        border-radius: 10px;
+        overflow-x: scroll;
+        max-width: 100%;
+        display: inline-block;
+    }
+
+    .teacher__grades::-webkit-scrollbar {
+        height: 16px;
         border-radius: 10px;
     }
 
+    .teacher__grades::-webkit-scrollbar-track {
+        background: rgba(0,0,0,25%);
+        border-radius: 10px;
+    }
+
+    .teacher__grades::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,50%);
+        border-radius: 10px;
+    }
     .teacher__item.up {
         line-height: 46px;
     }
@@ -433,7 +452,9 @@
         font-size: 20px;
         color: #fff;
         text-align: center;
-        flex: 0 1 20%;
+        overflow: hidden;
+        flex: 0 0 300px;
+        border-bottom: 2px solid rgba(0,0,0,50%);
     }
 
     .teacher__item.grade input {
@@ -452,8 +473,11 @@
         border-right: 2px solid rgba(0,0,0,50%);
     }
     .teacher__item.grade {
-        flex: 1 1 auto;
+        flex: 0 0 200px;
         overflow: hidden;
+    }
+    .teacher__item.grade p {
+        white-space: nowrap;
     }
     .teacher__row {
         display: flex;
@@ -542,6 +566,7 @@
         padding-left: 20px;
         position: relative;
         transition-duration: 100ms;
+        cursor: pointer;
     }
 
     .course__nav a:hover {

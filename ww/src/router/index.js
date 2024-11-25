@@ -8,6 +8,8 @@ import ScheduleView from "../views/ScheduleView.vue"
 import CourseView from "../views/CourseView.vue"
 import RegistrationView from '../views/RegistrationView.vue'
 import RatingView from "../views/RatingView.vue"
+import ScheduleEditView from '../views/ScheduleEditView.vue'
+import AttendanceView from "../views/AttendanceView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,6 +63,16 @@ const router = createRouter({
       path: '/rating',
       name: 'rating',
       component: RatingView
+    },
+    {
+      path: '/profile/:id/scheduleedit',
+      name: 'scheduleEdit',
+      component: ScheduleEditView
+    },
+    {
+      path: '/profile/:id/courses/:cid/attendance',
+      name: 'attendance',
+      component: AttendanceView
     }
   ]
 })

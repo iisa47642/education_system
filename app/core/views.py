@@ -275,6 +275,9 @@ class ControlEventViewSet(viewsets.ModelViewSet):
 class CreateStudentElectiveAPIView(APIView):
     # готово
     def post(self, request):
+        name = request.data["name"]
+        groupId = StudentGroup.objects.get(name=name).id
+        request.data["groupId"]=groupId
         serializer = CreateStudentElectiveSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             group = serializer.create(request.data)
@@ -285,6 +288,9 @@ class CreateStudentElectiveAPIView(APIView):
             )
             
     def delete(self, request):
+        name = request.data["name"]
+        groupId = StudentGroup.objects.get(name=name)
+        request.data["groupId"]=groupId
         serializer = DeleteStudentElectiveSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             group = serializer.delete(request.data)
@@ -329,8 +335,8 @@ class StudentElectiveAPIView(APIView):
             queryset2 = Subject.objects.filter(is_elective=True)
             serializer1 = SubjectSerializer(queryset1,many=True)
             serializer2 = SubjectSerializer(queryset2,many=True)
-            dict1 = {'student_group': serializer1.data[0]}
-            dict2 = {'all_group': serializer2.data[0]}
+            dict1 = {'student_group': serializer1.data}
+            dict2 = {'all_group': serializer2.data}
             merged_dictionary = {**dict1, **dict2}
             # if serializer1.is_valid(raise_exception=True) and serializer2.is_valid(raise_exception=True):
             return JsonResponse(merged_dictionary)

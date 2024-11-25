@@ -315,9 +315,15 @@ class CreateAttendanceAPIView(APIView):
             )
     
     def put(self, request):
-        last_att = LessonArchive.objects.get(
-            userId=request.data["userId"], lessonId=request.data["lessonId"]
-        )
+        userId = request.data["userId"]
+        date = request.data["date"]
+        subjectId = request.data["subjectId"]
+        type = request.data["type"]
+        sub_groupsId = Subject.objects.filter(id=subjectId).values_list("groups",flat=True)
+        us_groupsId = [i for i in CustomUser.objects.get(id=userId).student_groups.values_list('id',flat=True)]
+        groupId = list(set(sub_groupsId) & set(us_groupsId))[0]
+        lesId = Lesson.objects.get(subjectId=subjectId,date=date,groupId=groupId,type=type).id
+        last_att = LessonArchive.objects.get(lessonId=lesId,userId=userId)
         serializer = UpdateAttendanceSerializer(data=request.data, instance=last_att)
         if serializer.is_valid(raise_exception=True):
             serializer.save()

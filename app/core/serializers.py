@@ -212,28 +212,26 @@ class DeleteStudentElectiveSerializer(serializers.Serializer):
         
 class CreateAttendanceSerializer(serializers.Serializer):
     userId = serializers.IntegerField()
-    groupId = serializers.IntegerField()
     date = serializers.DateField()
     subjectId = serializers.IntegerField()
     attendance = serializers.BooleanField()
     type = serializers.IntegerField()
     
-    
     def create(self, validated_data):
         userId = validated_data["userId"]
-        groupId = validated_data["groupId"]
         date = validated_data["date"]
         subjectId = validated_data["subjectId"]
         type = validated_data["type"]
         attendance = validated_data["attendance"]
+        sub_groupsId = Subject.objects.filter(id=subjectId).values_list("groups",flat=True)
+        us_groupsId = [i for i in CustomUser.objects.get(id=userId).student_groups.values_list('id',flat=True)]
+        groupId = list(set(sub_groupsId) & set(us_groupsId))[0]
         # lesId = Lesson.objects.get(subjectId=subjectId,date=date,groupId=groupId,type=type).id
         query = LessonArchive.objects.create(lessonId=Lesson.objects.get(subjectId=subjectId,date=date,groupId=groupId,type=type),userId=CustomUser.objects.get(id=userId),attendance=attendance)
         return query    
         
 class UpdateAttendanceSerializer(serializers.Serializer):
-    userId = serializers.IntegerField()
     attendance = serializers.BooleanField()
-    lessonId = serializers.IntegerField()
         
     def update(self, instance, validated_data):
         instance.attendance = validated_data.get("attendance", instance.attendance)

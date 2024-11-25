@@ -20,7 +20,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from core.views import (
     RegistrationAPIView,LoginAPIView,LogoutAPIView,
     CreateMarksAPIView,
-    CreateStudentElectiveAPIView)
+    CreateStudentElectiveAPIView,
+    CreateAttendanceAPIView)
 import sys
 from django.conf import settings
 from app.settings import DEBUG, MEDIA_URL
@@ -36,6 +37,7 @@ urlpatterns = [
     path('api/v1/login',LoginAPIView.as_view(), name='login'),
     path('api/v1/createmark',CreateMarksAPIView.as_view(), name='createmark'),
     path('api/v1/createelective',CreateStudentElectiveAPIView.as_view(), name='createelective'),
+    path('api/v1/createattendance',CreateAttendanceAPIView.as_view(), name='createattendance'),
     
 ]
 

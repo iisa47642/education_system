@@ -100,7 +100,8 @@ class LessonSerializer(serializers.ModelSerializer):
             "week_day_number",
             "startTime",
             "endTime",
-            "type",
+      
+      "type",
             "location",
             "date",
         ]
@@ -151,7 +152,6 @@ class ControlEventCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ControlEvent
         fields = ("id",)
-
 
 class CreateMarksSerializer(serializers.ModelSerializer):
     userId = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
@@ -209,5 +209,28 @@ class DeleteStudentElectiveSerializer(serializers.Serializer):
 
         
         
+class CreateAttendanceSerializer(serializers.Serializer):
+    userId = serializers.IntegerField()
+    groupId = serializers.IntegerField()
+    date = serializers.DateField()
+    subjectId = serializers.IntegerField()
+    attendance = serializers.BooleanField()
+    type = serializers.IntegerField()
     
+    
+    def create(self, validated_data):
+        userId = validated_data["userId"]
+        groupId = validated_data["groupId"]
+        date = validated_data["date"]
+        subjectId = validated_data["subjectId"]
+        type = validated_data["type"]
+        attendance = validated_data["attendance"]
+        # lesId = Lesson.objects.get(subjectId=subjectId,date=date,groupId=groupId,type=type).id
+        query = LessonArchive.objects.create(lessonId=Lesson.objects.get(subjectId=subjectId,date=date,groupId=groupId,type=type),userId=CustomUser.objects.get(id=userId),attendance=attendance)
+        return query    
         
+class UpdateAttendanceSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        instance.attendance = validated_data.get("attendance", instance.attendance)
+        instance.save()
+        return instance

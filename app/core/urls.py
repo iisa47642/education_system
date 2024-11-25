@@ -5,6 +5,7 @@ from .views import (
     ProfileViewSet,
     ScheduleViewSet,
     AttendanceViewSet,
+    AttendanceSubViewSet,
     RatingViewSet,
     ControlEventMarkViewSet,
     StudentsInGroupViewSet,
@@ -21,6 +22,7 @@ router.register(r"course", CourseViewSet, "course")
 router.register(r"schedule", ScheduleViewSet, "schedule")
 router.register(r"rating", RatingViewSet, "rating")
 router.register(r"attendance", AttendanceViewSet, "attendance")
+router.register(r"attendancesub", AttendanceSubViewSet, "attendancesub")
 router.register(r"marks", ControlEventMarkViewSet, "marks")
 router.register(r"students", StudentsInGroupViewSet, "student")
 router.register(r"controlevent", ControlEventViewSet, "controlevent")

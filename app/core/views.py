@@ -29,7 +29,9 @@ from .serializers import (
     ControlEventSerializer,
     UpdateMarksSerializer,
     CreateStudentElectiveSerializer,
-    DeleteStudentElectiveSerializer
+    DeleteStudentElectiveSerializer,
+    CreateAttendanceSerializer,
+    UpdateAttendanceSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -202,7 +204,8 @@ class AttendanceSubViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         id_u = self.request.query_params.get("id")
         ids = self.request.query_params.get("ids")
-        queryset = LessonArchive.objects.filter(userId=id_u)
+        les_id = [i.id for i in Lesson.objects.filter(subjectId=ids)]
+        queryset = LessonArchive.objects.filter(userId=id_u,lessonId__in=les_id)
         return queryset
 
 
@@ -289,3 +292,29 @@ class CreateStudentElectiveAPIView(APIView):
             return Response(
                  {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
             )
+            
+class CreateAttendanceAPIView(APIView):
+    def post(self, request):
+        serializer = CreateAttendanceSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            group = serializer.create(request.data)
+            return Response(f"{request.data}", status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                 {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
+            )
+    
+    def put(self, request):
+        last_att = LessonArchive.objects.get(
+            userId=request.data["userId"], lessonId=request.data["lesId"]
+        )
+        serializer = UpdateAttendanceSerializer(data=request.data, instance=last_att)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(f"{request.data}", status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
+            )
+    
+            

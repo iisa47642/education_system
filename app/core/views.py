@@ -316,5 +316,15 @@ class CreateAttendanceAPIView(APIView):
             return Response(
                 {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
             )
-    
+
+class StudentElectiveViewSet(viewsets.ModelViewSet):
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        id_u = self.request.query_params.get("id")
+        groupsId = Subject.objects.filter(is_elective=True).values_list("groups",flat=True)
+        us_groups = [i for i in CustomUser.objects.get(id=id_u).student_groups.values_list('id',flat=True)]
+        groups = list(set(groupsId) & set(us_groups))
+        queryset = Subject.objects.filter(groups__in=groups)
+        return queryset
             

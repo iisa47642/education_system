@@ -9,7 +9,8 @@ from .views import (
     RatingViewSet,
     ControlEventMarkViewSet,
     StudentsInGroupViewSet,
-    ControlEventViewSet
+    ControlEventViewSet,
+    StudentElectiveViewSet
 )
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -26,9 +27,8 @@ router.register(r"attendancesub", AttendanceSubViewSet, "attendancesub")
 router.register(r"marks", ControlEventMarkViewSet, "marks")
 router.register(r"students", StudentsInGroupViewSet, "student")
 router.register(r"controlevent", ControlEventViewSet, "controlevent")
+router.register(r"studentelective", StudentElectiveViewSet, "studentelective")
 
-
-# router.register(r'marks', MarksViewSet, 'marks')
 
 # URLs настраиваются автоматически роутером
 urlpatterns = router.urls

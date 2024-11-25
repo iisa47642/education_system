@@ -40,6 +40,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import permissions
 from rest_framework.renderers import JSONRenderer
 from django.http import JsonResponse
+from core.gpa import updateGpaAndPerc
 
 class Id(permissions.BasePermission):
 
@@ -232,6 +233,7 @@ class CreateMarksAPIView(APIView):
         serializer = UpdateMarksSerializer(data=request.data, instance=last_mark)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
+            updateGpaAndPerc(request.data["userId"])
             return Response(f"{request.data}", status=status.HTTP_201_CREATED)
         else:
             return Response(
@@ -242,6 +244,7 @@ class CreateMarksAPIView(APIView):
         serializer = CreateMarksSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             mark = serializer.save()
+            updateGpaAndPerc(request.data["userId"])
             return Response(f"{request.data}", status=status.HTTP_201_CREATED)
         else:
             return Response(
@@ -344,3 +347,5 @@ class StudentElectiveAPIView(APIView):
             #     return Response(
             #      {"error": "Введены не все данные"}, status=status.HTTP_400_BAD_REQUEST
             # )
+
+

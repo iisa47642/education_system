@@ -89,6 +89,7 @@ class Subject(models.Model):
     # control_event = models.ManyToManyField(to=ControlEvent)
     additional_materials = models.ManyToManyField(AdditionalMaterials)
     is_elective = models.BooleanField(null=True)
+    hours_number = models.IntegerField(default=0)
     class Meta:
         db_table = 'subject'
         verbose_name = 'Предмет'
@@ -166,7 +167,3 @@ class LessonArchive(models.Model):
         verbose_name = 'Архив занятий'
         verbose_name_plural = 'Архив занятий'
 
-
-
-    
-        

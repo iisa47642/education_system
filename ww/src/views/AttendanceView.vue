@@ -50,7 +50,17 @@
                 }
             },
             async changeGroup(group) {
-                let response = await axios.get("/students", {
+                let response = await axios.get("/datelessons", {
+                    params: {
+                        name: group,
+                        ids: this.cid,
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                });
+                this.dates = response.data;
+                response = await axios.get("/students", {
                     params: {
                         name: group
                     },
@@ -208,6 +218,7 @@
         border: 2px solid rgba(0,0,0,50%);
         border-radius: 20px;
         overflow-x: scroll;
+        max-width: 100%;
     }
     .attendance__change::-webkit-scrollbar {
         height: 16px;
@@ -226,28 +237,30 @@
         color: #fff;
         font-size: 20px;
         font-family: "Bona Nova", serif;
-        padding: 0 20px;
-        border-bottom: 2px solid rgba(0,0,0,50%);
+        padding: 0;
     }
     .attendance__row:last-child {
         border-bottom: 0;
     }
     .attendance__date {
         padding: 10px;
-        flex: 0 1 100px;
+        flex: 0 0 100px;
         overflow: hidden;
+        border-bottom: 2px solid rgba(0,0,0,50%);
     }
     .attendance__date:not(:last-child) {
         border-right: 2px solid rgba(0,0,0,50%);
     }
     .attendance__name {
+        border-bottom: 2px solid rgba(0,0,0,50%);
         padding: 10px;
-        flex: 0 1 300px;
+        flex: 0 0 350px;
         text-align: center;
         border-right: 2px solid rgba(0,0,0,50%);
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
     }
     .attendance__date.attendance {
         padding: 0;

@@ -111,7 +111,7 @@
                     <li><a @click="goCourses">мои курсы</a></li>
                     <li><a @click="goSchedule">расписание</a></li>
                     <li><a @click="goRating">рейтинг</a></li>
-                    <li><a @click="goProfile">кабинет ст.</a></li>
+                    <li><a @click="goProfile">кабинет</a></li>
                 </ul>
                 <div class="burger-menu">
                     <a @click="burger"></a>

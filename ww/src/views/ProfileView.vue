@@ -48,6 +48,7 @@
                         this.$router.push({name: "login"});
                     }
                 });
+                console.log(response);
                 if (!response) {
                     await this.sleep(200);
                     response = await axios.get("/profile", {
@@ -102,9 +103,9 @@
                     </div>
                     <h3>{{ this.user.username }} {{ this.user.surname }}</h3>
                     <div class="right__info">
-                        <p>Дата рождения: {{ this.user.birthdate }}</p>
+                        <p>Дата рождения: {{ this.user.birth_date }}</p>
                         <p>Профиль: {{ this.user.profile }}</p>
-                        <p>Курс: {{ this.user.course }}</p>
+                        <p v-if="isStudent">Курс: {{ this.user.course }}</p>
                         <p>Др. Информация: {{ this.user.additional_info }}</p>
                     </div>
                     <div v-if="isStudent"class="right__grade">

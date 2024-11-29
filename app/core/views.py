@@ -138,9 +138,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         id_u = self.request.query_params.get("id")
-        if str(self.request.user) == str(CustomUser.objects.get(id=id_u).username):
-            queryset = CustomUser.objects.filter(id=id_u)
-            return queryset
+        # if str(self.request.user) == str(CustomUser.objects.get(id=id_u).username):
+        queryset = CustomUser.objects.filter(id=id_u)
+        return queryset
 
 
 class RatingViewSet(viewsets.ModelViewSet):
@@ -148,7 +148,7 @@ class RatingViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.filter(groups__name__icontains="student").order_by(
-        "-perc"
+        "-gpa"
     )
 
 

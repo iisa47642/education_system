@@ -19,8 +19,8 @@ class CustomUser(AbstractUser):
     profile = models.CharField(max_length=50, blank=True)
     course = models.IntegerField(null=True)
     additional_info = models.TextField(null=True)
-    gpa = models.FloatField(null=True, blank=True)
-    perc = models.FloatField(null=True, blank=True)
+    gpa = models.DecimalField(null=True, blank=True,decimal_places=2,max_digits=7)
+    perc = models.DecimalField(null=True, blank=True,decimal_places=2,max_digits=7)
     student_groups = models.ManyToManyField(to=StudentGroup,related_name='student_groups')
     
     

@@ -11,6 +11,7 @@ from core.models import (
     ControlEventMark,
     TypeOfControlEvent,
     LessonArchive,
+    EmailVerification
 )
 
 
@@ -23,13 +24,14 @@ class LessonLocationSerializer(serializers.ModelSerializer):
 class CustomUserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("username", "password", "email")
+        fields = ("username", "password", "email", 'is_active')
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(
             validated_data["username"],
             validated_data["email"],
             validated_data["password"],
+            is_active = False
         )
         user.set_password(validated_data["password"])
         return user
@@ -39,8 +41,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     student_groups = serializers.StringRelatedField(many=True)
     groups = serializers.StringRelatedField(many=True)
-    groups = serializers.StringRelatedField(many=True)
-
     class Meta:
         model = CustomUser
         fields = (

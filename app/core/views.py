@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout, views
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.mail import send_mail
+from core.utils import random
 from core.models import (
     CustomUser,
     Lesson,
@@ -14,6 +16,7 @@ from core.models import (
     LessonArchive,
     ControlEventMark,
     ControlEvent,
+    EmailVerification
 )
 from .serializers import (
     SubjectSerializer,
@@ -41,7 +44,6 @@ from rest_framework import permissions
 from rest_framework.renderers import JSONRenderer
 from django.http import JsonResponse
 from core.gpa import updateGpaAndPerc
-
 class Id(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
@@ -52,8 +54,12 @@ class Id(permissions.BasePermission):
 class RegistrationAPIView(APIView):
     def post(self, request):
         serializer = CustomUserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             user = serializer.save()
+            to_mail = user.email
+            code = random()
+            EmailVerification.objects.create(code=code, user=user)
+            send_mail('Verification',f'Your code: {code}','isaevisa578@gmail.com',[to_mail,],fail_silently=False,)
             refresh = RefreshToken.for_user(user)  # Создание Refesh и Access
             refresh.payload.update(
                 {  # Полезная информация в самом токене
@@ -69,6 +75,57 @@ class RegistrationAPIView(APIView):
                 status=status.HTTP_201_CREATED,
             )
 
+class VerificateAPIView(APIView):
+    def post(self, request):
+        data = request.data
+        username = data["username"]
+        email = CustomUser.objects.get(username=username).email
+        id_u = CustomUser.objects.get(email=email).id
+        code_u = EmailVerification.objects.get(user=id_u).code
+        code_r = data["code"]
+        if str(code_r) == str(code_u):
+            CustomUser.objects.filter(id=id_u).update(is_active=True)
+            return Response(
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+                {"error": "Неверный код"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        
+class ChangePasswordAPIView(APIView):
+        def post(self, request):
+            data = request.data
+            username = data["username"]
+            user = CustomUser.objects.get(username=username)
+            EmailVerification.objects.filter(user=user).delete()
+            to_mail = user.email
+            code = random()
+            EmailVerification.objects.create(user=user,code=code)
+            # EmailVerification.objects.filter(user=user).update(code=code)
+            send_mail('Verification',f'Your code: {code}','isaevisa578@gmail.com',[to_mail,],fail_silently=False,)
+            return Response(
+                status=status.HTTP_200_OK,
+            )
+
+class VerificatePasswordAPIView(APIView):
+    def post(self, request):
+        data = request.data
+        username = data["username"]
+        password = data["password"]
+        user = CustomUser.objects.get(username=username)
+        id_u = user.id
+        code_u = EmailVerification.objects.get(user=id_u).code
+        code_r = data["code"]
+        if str(code_r) == str(code_u):
+            user.set_password(password)
+            user.save()
+            EmailVerification.objects.filter(user=user).delete()
+            return Response(
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+                {"error": "Неверный код"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 class LoginAPIView(APIView):
     def post(self, request):

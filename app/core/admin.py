@@ -3,7 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 
 from core.models import (CustomUser, Lesson, LessonLocation,
                          Subject, TypeOfLesson, StudentGroup, LessonArchive,
-                         AdditionalMaterials, ControlEvent, TypeOfControlEvent, ControlEventMark)
+                         AdditionalMaterials, ControlEvent, TypeOfControlEvent, ControlEventMark,
+                         EmailVerification)
 
 
 # Register your models here.
@@ -54,4 +55,6 @@ class ControlEventMarkAdmin(admin.ModelAdmin):
 class ControlEventAdmin(admin.ModelAdmin):
     model = ControlEvent
 
-
+@admin.register(EmailVerification)
+class CEmailVerification(admin.ModelAdmin):
+    model = EmailVerification

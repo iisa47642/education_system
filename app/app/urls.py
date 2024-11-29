@@ -22,7 +22,10 @@ from core.views import (
     CreateMarksAPIView,
     CreateStudentElectiveAPIView,
     CreateAttendanceAPIView,
-    StudentElectiveAPIView)
+    StudentElectiveAPIView,
+    VerificateAPIView,
+    ChangePasswordAPIView,
+    VerificatePasswordAPIView)
 import sys
 from django.conf import settings
 from app.settings import DEBUG, MEDIA_URL
@@ -40,7 +43,9 @@ urlpatterns = [
     path('api/v1/createelective',CreateStudentElectiveAPIView.as_view(), name='createelective'),
     path('api/v1/createattendance',CreateAttendanceAPIView.as_view(), name='createattendance'),
     path('api/v1/studentelective/<int:id>/',StudentElectiveAPIView.as_view(), name='studentelective'),
-    
+    path('api/v1/emailverification',VerificateAPIView.as_view(), name='emailverification'),
+    path('api/v1/changepassword',ChangePasswordAPIView.as_view(), name='changepassword'),
+    path('api/v1/verificatepassword',VerificatePasswordAPIView.as_view(), name='verificatepassword'),
 ]
 
 if settings.DEBUG:

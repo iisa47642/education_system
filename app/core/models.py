@@ -167,3 +167,11 @@ class LessonArchive(models.Model):
         verbose_name = 'Архив занятий'
         verbose_name_plural = 'Архив занятий'
 
+
+class EmailVerification(models.Model):
+    code = models.CharField(max_length=6, unique=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+def __str__(self):
+    return f'EmailVerification for {self.user.email}'
